@@ -1,5 +1,4 @@
-import { User } from "@prisma/client";
-
+import { User } from "../infra/typeorm/entities/User";
 import { ICreateUserDTO } from "../services/createUser/CreateUserDTO";
 
 export interface IUsersRepository {

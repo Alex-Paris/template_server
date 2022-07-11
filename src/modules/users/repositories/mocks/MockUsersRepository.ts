@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User } from "modules/users/infra/typeorm/entities/User";
 import { ICreateUserDTO } from "modules/users/services/createUser/CreateUserDTO";
 import { v4 as uuidV4 } from "uuid";
 
@@ -12,13 +12,9 @@ export class MockUsersRepository implements IUsersRepository {
   private users: IMockUser[] = [];
 
   async create(data: ICreateUserDTO): Promise<User> {
-    const user: IMockUser = {
-      id: uuidV4(),
-      avatar: null,
-      created_at: new Date(),
-      updated_at: new Date(),
-      ...data,
-    };
+    const user = new User();
+
+    Object.assign(user, { id: uuidV4() }, data);
 
     this.users.push(user);
 
