@@ -14,11 +14,15 @@ export class UsersRepository implements IUsersRepository {
     this.repository = pgDataSource.getRepository(User);
   }
 
-  public async create(userData: ICreateUserDTO): Promise<User> {
+  async create(userData: ICreateUserDTO): Promise<User> {
     const user = this.repository.create(userData);
 
     await this.repository.save(user);
 
     return user;
+  }
+
+  async findByEmail(email: string): Promise<User | undefined | null> {
+    return this.repository.findOne({ where: { email } });
   }
 }
