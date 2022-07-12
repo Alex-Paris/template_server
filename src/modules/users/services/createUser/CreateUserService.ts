@@ -1,6 +1,8 @@
 import { IUsersRepository } from "modules/users/repositories/IUsersRepository";
 import { inject, injectable } from "tsyringe";
 
+import { IHashProvider } from "@shared/containers/providers/HashProvider/models/IHashProvider";
+
 import { ICreateUserDTO } from "./CreateUserDTO";
 import { CreateUserError } from "./CreateUserError";
 
@@ -8,17 +10,26 @@ import { CreateUserError } from "./CreateUserError";
 export class CreateUserService {
   constructor(
     @inject("UsersRepository")
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject("HashProvider")
+    private hashProvider: IHashProvider
   ) {}
 
-  async execute(data: ICreateUserDTO) {
-    const checkEmailExists = await this.usersRepository.findByEmail(data.email);
+  async execute({ name, email, password }: ICreateUserDTO) {
+    const checkEmailExists = await this.usersRepository.findByEmail(email);
 
     if (checkEmailExists) {
       throw new CreateUserError();
     }
 
-    const user = await this.usersRepository.create(data);
+    const hashedPassword = await this.hashProvider.generateHash(password);
+
+    const user = await this.usersRepository.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
 
     return user;
   }

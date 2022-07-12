@@ -1,11 +1,14 @@
 import { User } from "@modules/users/infra/typeorm/entities/User";
 import { MockUsersRepository } from "@modules/users/repositories/mocks/MockUsersRepository";
 
+import { MockHashProvider } from "@shared/containers/providers/HashProvider/mocks/MockHashProvider";
+
 import { ICreateUserDTO } from "./CreateUserDTO";
 import { CreateUserError } from "./CreateUserError";
 import { CreateUserService } from "./CreateUserService";
 
 let mockUsersRepository: MockUsersRepository;
+let mockHashProvider: MockHashProvider;
 let createUser: CreateUserService;
 let newUser: ICreateUserDTO;
 
@@ -20,7 +23,8 @@ describe("Create User Service", () => {
 
   beforeEach(() => {
     mockUsersRepository = new MockUsersRepository();
-    createUser = new CreateUserService(mockUsersRepository);
+    mockHashProvider = new MockHashProvider();
+    createUser = new CreateUserService(mockUsersRepository, mockHashProvider);
   });
 
   it("should be able to create a new user", async () => {
