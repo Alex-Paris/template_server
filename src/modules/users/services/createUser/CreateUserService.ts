@@ -20,7 +20,7 @@ export class CreateUserService {
     const checkEmailExists = await this.usersRepository.findByEmail(email);
 
     if (checkEmailExists) {
-      throw new CreateUserError();
+      throw new CreateUserError.EmailAlreadyUsed();
     }
 
     const hashedPassword = await this.hashProvider.generateHash(password);
