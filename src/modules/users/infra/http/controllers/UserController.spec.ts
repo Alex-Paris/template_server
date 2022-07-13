@@ -28,7 +28,7 @@ describe("User Controller", () => {
   });
 
   it("should be able to create a new user", async () => {
-    const response = await request(app).post("/api/v1/users").send(newUser);
+    const response = await request(app).post("/api/v1/user").send(newUser);
     const user = await pgDataSource
       .createQueryBuilder<User>(User, "users")
       .where("users.email = :email", { email: newUser.email })
@@ -46,7 +46,7 @@ describe("User Controller", () => {
   });
 
   it("should not be able to create an user if inserted email already exists", async () => {
-    const response = await request(app).post("/api/v1/users").send(newUser);
+    const response = await request(app).post("/api/v1/user").send(newUser);
 
     expect(response.status).toBe(400);
   });
