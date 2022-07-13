@@ -5,6 +5,7 @@ Template for server API with Typescript
 
 ## Packages
 *bcryptjs* - Used to hash and validate user password
+*celebrate* - Used as a middleware to validate 'put' and 'post' routes body
 *class-transformer* - Adapt class to ignore certain columns like password
 *dotenv* - For ".env" files to be accepted
 *express* - HTTP request and response method

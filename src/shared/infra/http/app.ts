@@ -3,6 +3,7 @@ import "express-async-errors";
 import "../typeorm";
 import "../../containers";
 
+import celebrate from "celebrate";
 import express, { NextFunction, Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
 
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use("/api/v1", routes);
 
 app.use("/api/v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+app.use(celebrate.errors());
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
