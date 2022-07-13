@@ -8,7 +8,7 @@ export const pgDataSource = new DataSource({
   password: process.env.PG_PASS,
   database: process.env.PG_DB,
   migrationsTableName: "_migrations",
-  migrationsRun: true,
+  migrationsRun: process.env.NODE_ENV !== "test",
   migrations: ["./src/shared/infra/typeorm/migrations/*{.ts,.js}"],
   entities: ["./src/modules/**/infra/typeorm/entities/*.ts"],
 });
