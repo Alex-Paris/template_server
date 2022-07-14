@@ -7,8 +7,9 @@ export const pgDataSource = new DataSource({
   username: process.env.PG_USER,
   password: process.env.PG_PASS,
   database: process.env.PG_DB,
+  dropSchema: process.env.NODE_ENV !== "production",
   migrationsTableName: "_migrations",
-  migrationsRun: process.env.NODE_ENV !== "test",
+  migrationsRun: process.env.NODE_ENV !== "test", // Fix duplicate migration for jest
   migrations: ["./src/shared/infra/typeorm/migrations/*{.ts,.js}"],
   entities: ["./src/modules/**/infra/typeorm/entities/*.ts"],
 });
