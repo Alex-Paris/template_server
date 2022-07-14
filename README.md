@@ -10,6 +10,7 @@ Template for server API with Typescript
 *dotenv* - For ".env" files to be accepted
 *express* - HTTP request and response method
 *express-async-errors* - Let the possibility to use a class to proccess error messages
+*jsonwebtoken* - Method to authenticate services in `rest`. Divided by 3 parts: Headers, Payload and Signature.
 *pg* - PostgreSQL components
 *reflect-metadata* - Used for typeORM to parse decorators and use it to building sql queries
 *swagger-ui-express* - Documentation for API routes
