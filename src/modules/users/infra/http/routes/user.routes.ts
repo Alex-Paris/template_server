@@ -3,11 +3,11 @@ import { Router } from "express";
 
 import { UserController } from "../controllers/UserController";
 
-const usersRouter = Router();
+const userRouter = Router();
 
-const usersController = new UserController();
+const userController = new UserController();
 
-usersRouter.post(
+userRouter.post(
   "/",
   celebrate({
     [Segments.BODY]: {
@@ -16,7 +16,7 @@ usersRouter.post(
       password: Joi.string().required(),
     },
   }),
-  usersController.create
+  userController.create
 );
 
-export { usersRouter };
+export { userRouter };

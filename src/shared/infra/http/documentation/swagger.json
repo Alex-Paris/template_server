@@ -95,7 +95,7 @@
         "email": {
           "type": "string"
         },
-        "password": {
+        "avatar_url": {
           "type": "string"
         },
         "created_at": {
