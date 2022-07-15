@@ -27,12 +27,20 @@
         "description": "Find out more",
         "url": "http://swagger.io"
       }
+    },
+    {
+      "name": "session",
+      "description": "Operations about user sessions",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
     }
   ],
   "paths": {
     "/user": {
       "post": {
-        "deprecated": true,
+        "deprecated": false,
         "tags": [
           "user"
         ],
@@ -63,7 +71,7 @@
               },
               "password": {
                 "type": "number",
-                "example": "passwordsample"
+                "example": "samplepass"
               }
             }
           }
@@ -77,6 +85,52 @@
           },
           "400": {
             "description": "Email already in use"
+          }
+        }
+      }
+    },
+    "/session": {
+      "post": {
+        "tags": [
+          "session"
+        ],
+        "summary": "Authenticate a user session",
+        "description": "",
+        "operationId": "authenticateSession",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Authenticate user session object",
+            "required": true,
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "example": "sample@email.com"
+              },
+              "password": {
+                "type": "number",
+                "example": "samplepass"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          },
+          "401": {
+            "description": "Incorrect email/password combination."
           }
         }
       }
@@ -105,6 +159,42 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "Session": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "avatar_url": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updated_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "token": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
         }
       }
     }
