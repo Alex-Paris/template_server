@@ -39,7 +39,7 @@ describe("Create User Service", () => {
     await createUser.execute(newUser);
 
     await expect(createUser.execute(newUser)).rejects.toBeInstanceOf(
-      CreateUserError
+      CreateUserError.EmailAlreadyUsed
     );
   });
 });
