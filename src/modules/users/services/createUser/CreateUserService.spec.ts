@@ -28,11 +28,11 @@ describe("Create User Service", () => {
   });
 
   it("should be able to create a new user", async () => {
-    const user = await createUser.execute(newUser);
+    const response = await createUser.execute(newUser);
 
-    expect(user).toBeInstanceOf(User);
-    expect(user).toHaveProperty("id");
-    expect(user.email).toBe(newUser.email);
+    expect(response).toBeInstanceOf(User);
+    expect(response).toHaveProperty("id");
+    expect(response.email).toBe(newUser.email);
   });
 
   it("should not be able to create user if email already in use", async () => {
