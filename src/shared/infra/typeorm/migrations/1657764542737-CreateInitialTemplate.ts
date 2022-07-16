@@ -62,21 +62,57 @@ export class CreateInitialTemplate1657764542737 implements MigrationInterface {
             type: "varchar",
           },
           {
-            name: "user_id",
-            type: "uuid",
+            name: "expires_at",
+            type: "timestamp",
+          },
+          {
+            name: "revoked_by_ip",
+            type: "varchar",
+            isNullable: true,
+          },
+          {
+            name: "revoked_at",
+            type: "timestamp",
+            isNullable: true,
+          },
+          {
+            name: "revoked_reason",
+            type: "varchar",
+            isNullable: true,
+          },
+          {
+            name: "created_by_ip",
+            type: "varchar",
           },
           {
             name: "created_at",
             type: "timestamp",
             default: "now()",
           },
+          {
+            name: "replaced_token_id",
+            type: "uuid",
+            isNullable: true,
+          },
+          {
+            name: "user_id",
+            type: "uuid",
+          },
         ],
         foreignKeys: [
           {
-            name: "FKUserToken",
+            name: "FK_replacedTokenId",
+            columnNames: ["replaced_token_id"],
+            referencedTableName: "users_tokens",
+            referencedColumnNames: ["id"],
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE",
+          },
+          {
+            name: "FK_userId",
+            columnNames: ["user_id"],
             referencedTableName: "users",
             referencedColumnNames: ["id"],
-            columnNames: ["user_id"],
             onDelete: "CASCADE",
             onUpdate: "CASCADE",
           },

@@ -44,7 +44,9 @@ describe("Session Controller", () => {
     expect(userToken).toBeInstanceOf(UserTokens);
     expect(response.body).toHaveProperty("token");
     expect(response.body.user.id).toBe(authUser.id);
-    expect(response.body.refresh_token).toBe(userToken?.refresh_token);
+    expect(String(response.header["set-cookie"]).split("; ")[0]).toContain(
+      userToken?.refresh_token
+    );
   });
 
   it("should not be able to authenticate with an invalid email", async () => {

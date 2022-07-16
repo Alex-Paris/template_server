@@ -127,6 +127,15 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/Session"
+            },
+            "headers": {
+              "Cookie": {
+                "schema": {
+                  "type": "string",
+                  "description": "refresh_token cookie for session",
+                  "example": "refresh_token=abcde12345; Expires=Sat, 23 Jul 2022 09:29:15 GMT; Path=/; HttpOnly; SameSite=Lax; Domain=localhost"
+                }
+              }
             }
           },
           "401": {
@@ -169,9 +178,6 @@
           "$ref": "#/definitions/User"
         },
         "token": {
-          "type": "string"
-        },
-        "refresh_token": {
           "type": "string"
         }
       }

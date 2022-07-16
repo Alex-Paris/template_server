@@ -1,10 +1,11 @@
 import { UserTokens } from "../infra/typeorm/entities/UserTokens";
-import { ICreateUserTokenDTO } from "../services/authenticateSession/AuthenticateSessionDTO";
+import { IAuthenticateSessionDTO } from "../services/authenticateSession/AuthenticateSessionDTO";
 
 export interface IUsersTokensRepository {
-  create(data: ICreateUserTokenDTO): Promise<UserTokens>;
+  create(data: IAuthenticateSessionDTO): Promise<UserTokens>;
   findByUserIdAndRefreshToken(
-    data: ICreateUserTokenDTO
+    user_id: string,
+    refresh_token: string
   ): Promise<UserTokens | undefined | null>;
   deleteById(id: string): Promise<void>;
 }

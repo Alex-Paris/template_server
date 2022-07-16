@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 
 import { IUsersTokensRepository } from "@modules/users/repositories/IUsersTokensRepository";
-import { ICreateUserTokenDTO } from "@modules/users/services/authenticateSession/AuthenticateSessionDTO";
+import { IAuthenticateSessionDTO } from "@modules/users/services/authenticateSession/AuthenticateSessionDTO";
 
 import { pgDataSource } from "@shared/infra/typeorm/data-source";
 
@@ -14,7 +14,7 @@ export class UsersTokensRepository implements IUsersTokensRepository {
     this.repository = pgDataSource.getRepository(UserTokens);
   }
 
-  async create(data: ICreateUserTokenDTO): Promise<UserTokens> {
+  async create(data: IAuthenticateSessionDTO): Promise<UserTokens> {
     const userToken = this.repository.create(data);
 
     await this.repository.save(userToken);
@@ -22,10 +22,10 @@ export class UsersTokensRepository implements IUsersTokensRepository {
     return userToken;
   }
 
-  async findByUserIdAndRefreshToken({
-    user_id,
-    refresh_token,
-  }: ICreateUserTokenDTO): Promise<UserTokens | undefined | null> {
+  async findByUserIdAndRefreshToken(
+    user_id: string,
+    refresh_token: string
+  ): Promise<UserTokens | undefined | null> {
     return this.repository.findOne({
       where: {
         user_id,

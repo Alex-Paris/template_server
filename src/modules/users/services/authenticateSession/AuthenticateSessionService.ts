@@ -15,6 +15,7 @@ import { AuthenticateSessionError } from "./AuthenticateSessionError";
 interface IRequestDTO {
   email: string;
   password: string;
+  remote_address: string;
 }
 
 interface IResponse {
@@ -37,7 +38,11 @@ export class AuthenticateSessionService {
     private hashProvider: IHashProvider
   ) {}
 
-  public async execute({ email, password }: IRequestDTO): Promise<IResponse> {
+  public async execute({
+    email,
+    password,
+    remote_address,
+  }: IRequestDTO): Promise<IResponse> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
@@ -68,8 +73,10 @@ export class AuthenticateSessionService {
     const refresh_expiration = add(new Date(), { days: refreshExpiresIn });
 
     await this.usersTokensRepository.create({
-      user_id: user.id,
       refresh_token,
+      expires_at: refresh_expiration,
+      created_by_ip: remote_address,
+      user_id: user.id,
     });
 
     return { user, token, refresh_token, refresh_expiration };
