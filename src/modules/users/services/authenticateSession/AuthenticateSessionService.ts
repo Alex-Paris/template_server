@@ -1,3 +1,4 @@
+import { add } from "date-fns";
 import { sign } from "jsonwebtoken";
 import { injectable, inject } from "tsyringe";
 
@@ -20,6 +21,7 @@ interface IResponse {
   user: User;
   token: string;
   refresh_token: string;
+  refresh_expiration: Date;
 }
 
 @injectable()
@@ -60,14 +62,16 @@ export class AuthenticateSessionService {
 
     const refresh_token = sign({ email }, refreshSecret, {
       subject: user.id,
-      expiresIn: refreshExpiresIn,
+      expiresIn: `${refreshExpiresIn}d`,
     });
+
+    const refresh_expiration = add(new Date(), { days: refreshExpiresIn });
 
     await this.usersTokensRepository.create({
       user_id: user.id,
       refresh_token,
     });
 
-    return { user, token, refresh_token };
+    return { user, token, refresh_token, refresh_expiration };
   }
 }
