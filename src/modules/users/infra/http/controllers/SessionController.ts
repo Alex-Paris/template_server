@@ -7,7 +7,7 @@ import { AuthenticateSessionService } from "@modules/users/services/authenticate
 export class SessionController {
   async authenticate(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
-    const remote_address = request.socket.remoteAddress || "";
+    const remote_address = request.socket.remoteAddress as string;
 
     const authenticateUser = container.resolve(AuthenticateSessionService);
 

@@ -36,7 +36,11 @@ describe("Authenticate Session Service", () => {
   });
 
   it("should be able to authenticate user session", async () => {
-    const response = await authenticateSession.execute(authUser);
+    const response = await authenticateSession.execute({
+      email: authUser.email,
+      password: authUser.password,
+      remote_address: "127.0.0.1",
+    });
 
     expect(response).toHaveProperty("token");
     expect(response).toHaveProperty("refresh_token");
@@ -48,6 +52,7 @@ describe("Authenticate Session Service", () => {
       authenticateSession.execute({
         email: "invalid@email.com",
         password: authUser.password,
+        remote_address: "127.0.0.1",
       })
     ).rejects.toBeInstanceOf(
       AuthenticateSessionError.IncorrectEmailOrPasswordError
@@ -59,6 +64,7 @@ describe("Authenticate Session Service", () => {
       authenticateSession.execute({
         email: authUser.email,
         password: "invalid-pass",
+        remote_address: "127.0.0.1",
       })
     ).rejects.toBeInstanceOf(
       AuthenticateSessionError.IncorrectEmailOrPasswordError
