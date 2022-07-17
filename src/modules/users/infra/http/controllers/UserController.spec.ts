@@ -11,9 +11,12 @@ let newUser: ICreateUserDTO;
 
 describe("User Controller", () => {
   beforeAll(async () => {
+    // Connects at database and run migrations. It must be done in each test
+    // controller file.
     await pgDataSource.initialize();
     await pgDataSource.runMigrations();
 
+    // Put that new user information inside a var.
     newUser = {
       name: "Name Sample",
       email: "sample@email.com",
@@ -22,12 +25,16 @@ describe("User Controller", () => {
   });
 
   afterAll(async () => {
+    // Delete and destroy entirely data.
     await pgDataSource.dropDatabase();
     await pgDataSource.destroy();
   });
 
   it("should be able to create a new user", async () => {
+    // Creates user.
     const response = await request(app).post("/api/v1/user").send(newUser);
+
+    // Get the user saved at database for expecting test analisys.
     const user = await pgDataSource
       .createQueryBuilder<User>(User, "users")
       .where("users.email = :email", { email: newUser.email })

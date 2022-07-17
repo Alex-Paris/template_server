@@ -31,6 +31,7 @@ export class User {
   @UpdateDateColumn()
   updated_at: Date;
 
+  /** Get avatar url depending of it's storaged local. */
   @Expose({ name: "avatar_url" })
   getAvatarUrl(): string | null {
     if (!this.avatar) {

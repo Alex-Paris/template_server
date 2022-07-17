@@ -32,6 +32,11 @@ export class RefreshSessionService {
     private usersTokensRepository: IUsersTokensRepository
   ) {}
 
+  /**
+   * Refresh token for user session.
+   * @param cookie_refresh_token refresh token forneced in a cookies request.
+   * @param remote_address ip address of request user.
+   */
   async execute({
     cookie_refresh_token,
     remote_address,

@@ -15,17 +15,20 @@ let authUser: ICreateUserDTO;
 
 describe("Authenticate Session Service", () => {
   beforeAll(() => {
+    // Put new user information inside a var.
     authUser = {
       name: "Name Sample",
       email: "sample@email.com",
       password: "samplepass",
     };
 
+    // Create this user in mock for session tests
     mockUsersRepository = new MockUsersRepository();
     mockUsersRepository.create(authUser);
   });
 
   beforeEach(() => {
+    // Getting mocks components for service.
     mockUsersTokensRepository = new MockUsersTokensRepository();
     mockHashProvider = new MockHashProvider();
     authenticateSession = new AuthenticateSessionService(

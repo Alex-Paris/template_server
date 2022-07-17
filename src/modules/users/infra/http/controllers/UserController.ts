@@ -5,9 +5,12 @@ import { container } from "tsyringe";
 import { CreateUserService } from "@modules/users/services/createUser/CreateUserService";
 
 export class UserController {
-  async create(request: Request, response: Response): Promise<Response> {
-    const { name, email, password } = request.body;
+  /** Creates a new user. */
+  async create(req: Request, res: Response): Promise<Response> {
+    // Get name, email and pass in body request to create a user.
+    const { name, email, password } = req.body;
 
+    // Injects containers at service and execute it.
     const createUser = container.resolve(CreateUserService);
 
     const user = await createUser.execute({
@@ -16,6 +19,6 @@ export class UserController {
       password,
     });
 
-    return response.status(201).json(instanceToInstance(user));
+    return res.status(201).json(instanceToInstance(user));
   }
 }

@@ -14,6 +14,7 @@ let newUser: ICreateUserDTO;
 
 describe("Create User Service", () => {
   beforeAll(() => {
+    // Put new user information inside a var.
     newUser = {
       name: "Name Sample",
       email: "sample@email.com",
@@ -22,6 +23,7 @@ describe("Create User Service", () => {
   });
 
   beforeEach(() => {
+    // Getting mocks components for service.
     mockUsersRepository = new MockUsersRepository();
     mockHashProvider = new MockHashProvider();
     createUser = new CreateUserService(mockUsersRepository, mockHashProvider);

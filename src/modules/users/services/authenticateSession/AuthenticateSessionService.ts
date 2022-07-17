@@ -39,6 +39,12 @@ export class AuthenticateSessionService {
     private hashProvider: IHashProvider
   ) {}
 
+  /**
+   * Authenticate user session.
+   * @param email email of the user. Must not exist in repository.
+   * @param password password of the user.
+   * @param remote_address ip address of request user.
+   */
   public async execute({
     email,
     password,
@@ -46,6 +52,7 @@ export class AuthenticateSessionService {
   }: IRequestDTO): Promise<IResponse> {
     const user = await this.usersRepository.findByEmail(email);
 
+    // Validating if its a valid user
     if (!user) {
       throw new AuthenticateSessionError.IncorrectEmailOrPasswordError();
     }
@@ -55,12 +62,14 @@ export class AuthenticateSessionService {
       user.password
     );
 
+    // Comparing if inserted pass match with saved onde
     if (!passwordMatched) {
       throw new AuthenticateSessionError.IncorrectEmailOrPasswordError();
     }
 
     const { secret, expiresIn, refreshSecret, refreshExpiresIn } = auth.jwt;
 
+    // Generate new token and refresh token
     const token = sign({}, secret, {
       subject: user.id,
       expiresIn,
@@ -71,8 +80,10 @@ export class AuthenticateSessionService {
       expiresIn: `${refreshExpiresIn}d`,
     });
 
+    // Getting refresh token expiration date for cookie
     const refresh_expiration = addDays(dateNow(), refreshExpiresIn);
 
+    // Create a new refresh token
     await this.usersTokensRepository.create({
       refresh_token,
       expires_at: refresh_expiration,
