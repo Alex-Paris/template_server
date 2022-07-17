@@ -1,3 +1,4 @@
+import { instanceToInstance } from "class-transformer";
 import { sign } from "jsonwebtoken";
 import { injectable, inject } from "tsyringe";
 
@@ -94,6 +95,11 @@ export class AuthenticateSessionService {
     // Remove old refresh tokens from user
     await this.usersTokensRepository.deleteOldRefreshTokens(user.id);
 
-    return { user, token, refresh_token, refresh_expiration };
+    return {
+      user: instanceToInstance(user),
+      token,
+      refresh_token,
+      refresh_expiration,
+    };
   }
 }

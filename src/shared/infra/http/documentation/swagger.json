@@ -1,5 +1,5 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.ˆ",
   "info": {
     "title": "Template Project Documentation",
     "description": "This is a sample server Template server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters.",
@@ -17,8 +17,12 @@
     "description": "Find out more about Swagger",
     "url": "http://swagger.io"
   },
-  "host": "localhost:3333",
-  "basePath": "/api/v1",
+  "servers": [
+    {
+      "url": "http://localhost:3333/api/v1",
+      "description": "Main server."
+    }
+  ],
   "tags": [
     {
       "name": "user",
@@ -47,40 +51,38 @@
         "summary": "Create a user",
         "description": "",
         "operationId": "createUser",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Create user object",
-            "required": true,
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "example": "Name Sample"
-              },
-              "email": {
-                "type": "string",
-                "example": "sample@email.com"
-              },
-              "password": {
-                "type": "number",
-                "example": "samplepass"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Name Sample"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "sample@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "samplepass"
+                  }
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "201": {
             "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/User"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/User"
+                }
+              }
             }
           },
           "400": {
@@ -89,7 +91,7 @@
         }
       }
     },
-    "/session": {
+    "/session/authenticate": {
       "post": {
         "tags": [
           "session"
@@ -97,42 +99,39 @@
         "summary": "Authenticate a user session",
         "description": "",
         "operationId": "authenticateSession",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Authenticate user session object",
-            "required": true,
-            "type": "object",
-            "properties": {
-              "email": {
-                "type": "string",
-                "example": "sample@email.com"
-              },
-              "password": {
-                "type": "number",
-                "example": "samplepass"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "sample@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "samplepass"
+                  }
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Session"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Session"
+                }
+              }
             },
             "headers": {
-              "Cookie": {
+              "Set-Cookie": {
                 "schema": {
                   "type": "string",
-                  "description": "refresh_token cookie for session",
                   "example": "refresh_token=abcde12345; Expires=Sat, 23 Jul 2022 09:29:15 GMT; Path=/; HttpOnly; SameSite=Lax; Domain=localhost"
                 }
               }
@@ -140,6 +139,44 @@
           },
           "401": {
             "description": "Incorrect email/password combination."
+          }
+        }
+      }
+    },
+    "/session/refresh-token": {
+      "post": {
+        "tags": [
+          "session"
+        ],
+        "summary": "Refresh user session token",
+        "description": "",
+        "operationId": "refreshSession",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Session"
+                }
+              }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "refresh_token=abcde12345; Expires=Sat, 23 Jul 2022 09:29:15 GMT; Path=/; HttpOnly; SameSite=Lax; Domain=localhost"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Refresh token not found; Invalid Refresh Token; Expired Refresh Token; Refresh Token already revoked;"
           }
         }
       }
@@ -189,6 +226,11 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
+      },
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "refresh_token"
       }
     }
   }
