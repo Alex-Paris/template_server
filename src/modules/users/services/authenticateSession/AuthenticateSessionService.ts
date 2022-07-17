@@ -91,6 +91,9 @@ export class AuthenticateSessionService {
       user_id: user.id,
     });
 
+    // Remove old refresh tokens from user
+    await this.usersTokensRepository.deleteOldRefreshTokens(user.id);
+
     return { user, token, refresh_token, refresh_expiration };
   }
 }
