@@ -69,6 +69,7 @@
           "/^@modules/",
           "/^@config/",
           "/^@shared/",
+          "/^@utils/",
           [
             "parent",
             "sibling",

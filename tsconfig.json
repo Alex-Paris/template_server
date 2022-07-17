@@ -13,6 +13,9 @@
       ],
       "@shared/*": [
         "shared/*"
+      ],
+      "@utils/*": [
+        "utils/*"
       ]
     },
     "strict": true,

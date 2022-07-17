@@ -1,4 +1,3 @@
-import { add } from "date-fns";
 import { sign } from "jsonwebtoken";
 import { injectable, inject } from "tsyringe";
 
@@ -8,6 +7,8 @@ import { IUsersTokensRepository } from "@modules/users/repositories/IUsersTokens
 import auth from "@config/auth";
 
 import { IHashProvider } from "@shared/containers/providers/HashProvider/models/IHashProvider";
+
+import { addDays, dateNow } from "@utils/date";
 
 import { User } from "../../infra/typeorm/entities/User";
 import { AuthenticateSessionError } from "./AuthenticateSessionError";
@@ -70,7 +71,7 @@ export class AuthenticateSessionService {
       expiresIn: `${refreshExpiresIn}d`,
     });
 
-    const refresh_expiration = add(new Date(), { days: refreshExpiresIn });
+    const refresh_expiration = addDays(dateNow(), refreshExpiresIn);
 
     await this.usersTokensRepository.create({
       refresh_token,

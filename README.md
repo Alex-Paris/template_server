@@ -18,6 +18,8 @@ Template for server API with Typescript
 
 *class-transformer* - Adapt class to ignore certain columns like password.
 
+*dayjs* - Date manipulation.
+
 *dotenv* - For ".env" files to be accepted.
 
 *express* - HTTP request and response method.

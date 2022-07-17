@@ -1,3 +1,4 @@
+import { Expose } from "class-transformer";
 import {
   Column,
   CreateDateColumn,
@@ -7,6 +8,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+
+import { dateNow, isBefore } from "@utils/date";
 
 import { User } from "./User";
 
@@ -50,4 +53,19 @@ export class UserTokens {
   @ManyToOne(() => User)
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @Expose({ name: "is_expired" })
+  getIsExpired(): boolean {
+    return isBefore(this.expires_at, dateNow());
+  }
+
+  @Expose({ name: "is_revoked" })
+  getIsRevoked(): boolean {
+    return this.revoked_at !== null;
+  }
+
+  @Expose({ name: "is_active" })
+  getIsActive(): boolean {
+    return !this.getIsExpired() && !this.getIsRevoked();
+  }
 }
