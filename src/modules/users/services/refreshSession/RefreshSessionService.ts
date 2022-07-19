@@ -14,9 +14,11 @@ interface IRequestDTO {
   remote_address: string;
 }
 
-interface IPayload {
+interface ITokenPayload {
   email: string;
   sub: string;
+  iat: number;
+  exp: number;
 }
 
 interface IResponse {
@@ -45,15 +47,15 @@ export class RefreshSessionService {
 
     let decoded;
 
-    // Validating if refresh token is a valid JWT
+    // Validating if refresh token is a valid JWT.
     try {
       decoded = verify(cookie_refresh_token, refreshSecret);
     } catch {
       throw new RefreshSessionError.RefreshTokenInvalid();
     }
 
-    // Obtaining refresh token data and database information
-    const { email, sub: user_id } = decoded as IPayload;
+    // Obtaining refresh token data and database information.
+    const { email, sub: user_id } = decoded as ITokenPayload;
 
     const userToken =
       await this.usersTokensRepository.findByUserIdAndRefreshToken(
@@ -61,19 +63,19 @@ export class RefreshSessionService {
         cookie_refresh_token
       );
 
-    // Validating if refresh token was not found in database
+    // Validating if refresh token was not found in database.
     if (!userToken) {
       throw new RefreshSessionError.RefreshTokenNotFound();
     }
 
-    // Validating if refresh token was expired
+    // Validating if refresh token was expired.
     if (userToken.getIsExpired()) {
       throw new RefreshSessionError.RefreshTokenExpired();
     }
 
-    // Validating if refresh token was already used and revoked
+    // Validating if refresh token was already used and revoked.
     if (userToken.getIsRevoked()) {
-      // revoke all descendant tokens in case this token has been compromised
+      // revoke all descendant tokens in case this token has been compromised.
       await this.usersTokensRepository.revokeDescendantRefreshToken({
         userToken,
         ipAddress: remote_address,
@@ -83,7 +85,7 @@ export class RefreshSessionService {
       throw new RefreshSessionError.RefreshTokenRevoked();
     }
 
-    // Generate new token and refresh token
+    // Generate new token and refresh token.
     const token = sign({}, secret, {
       subject: user_id,
       expiresIn,
@@ -94,10 +96,10 @@ export class RefreshSessionService {
       expiresIn: `${refreshExpiresIn}d`,
     });
 
-    // Getting refresh token expiration date for cookie
+    // Getting refresh token expiration date for cookie.
     const refresh_expiration = addDays(dateNow(), refreshExpiresIn);
 
-    // Replace old refresh token with a new one (rotate token)
+    // Replace old refresh token with a new one (rotate token).
     const { id: replacedByToken } = await this.usersTokensRepository.create({
       refresh_token,
       expires_at: refresh_expiration,
@@ -108,11 +110,11 @@ export class RefreshSessionService {
     await this.usersTokensRepository.revokeRefreshToken({
       userToken,
       ipAddress: remote_address,
-      reason: "Refresh token used and replaced",
+      reason: "Refresh token used and replaced.",
       replacedByToken,
     });
 
-    // Remove old refresh tokens from user
+    // Remove old refresh tokens from user.
     await this.usersTokensRepository.deleteOldRefreshTokens(user_id);
 
     return {

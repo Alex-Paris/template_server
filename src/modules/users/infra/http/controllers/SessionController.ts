@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 
 import { AuthenticateSessionService } from "@modules/users/services/authenticateSession/AuthenticateSessionService";
+import { RefreshSessionService } from "@modules/users/services/refreshSession/RefreshSessionService";
 
 export class SessionController {
   /** Authenticate user session generating a new token and refresh token. */
@@ -13,10 +14,10 @@ export class SessionController {
     const remote_address = req.socket.remoteAddress as string;
 
     // Injects containers at service and execute it.
-    const authenticateUser = container.resolve(AuthenticateSessionService);
+    const authenticateService = container.resolve(AuthenticateSessionService);
 
     const { user, token, refresh_token, refresh_expiration } =
-      await authenticateUser.execute({
+      await authenticateService.execute({
         email,
         password,
         remote_address,
@@ -34,6 +35,40 @@ export class SessionController {
         })
         .json({
           user: instanceToInstance(user),
+          token,
+        })
+    );
+  }
+
+  /** Refresh token for user session, generating a new token and refresh token
+   * and revoking used one.
+   */
+  async refresh(req: Request, res: Response): Promise<Response> {
+    // Get refresh token cookie.
+    const [, refreshToken] = String(req.headers.cookie).split("refresh_token=");
+    // Get remote address for refresh token register.
+    const remote_address = req.socket.remoteAddress as string;
+
+    // Injects containers at service and execute it.
+    const refreshService = container.resolve(RefreshSessionService);
+
+    const { token, refresh_token, refresh_expiration } =
+      await refreshService.execute({
+        cookie_refresh_token: refreshToken,
+        remote_address,
+      });
+
+    return (
+      res
+        // Refresh token go inside a cookie so they are not accessible to
+        // client-side javascript which prevents XSS (cross site scripting)
+        // attacks. The cookie will be replaced by the new one.
+        .cookie("refresh_token", refresh_token, {
+          httpOnly: true,
+          sameSite: "lax",
+          expires: refresh_expiration,
+        })
+        .json({
           token,
         })
     );

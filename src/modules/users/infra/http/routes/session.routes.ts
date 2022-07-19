@@ -8,7 +8,7 @@ const sessionRouter = Router();
 const sessionController = new SessionController();
 
 sessionRouter.post(
-  "/",
+  "/authenticate",
   celebrate({
     [Segments.BODY]: {
       email: Joi.string().email().required(),
@@ -17,5 +17,7 @@ sessionRouter.post(
   }),
   sessionController.authenticate
 );
+
+sessionRouter.post("/refresh-token", sessionController.refresh);
 
 export { sessionRouter };
