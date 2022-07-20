@@ -49,9 +49,13 @@ export class UsersTokensRepository implements IUsersTokensRepository {
     userToken,
     ipAddress,
     reason,
-    replacedByToken = "",
+    replacedByToken,
   }: IRevokeTokenDTO): Promise<void> {
-    const childToken = await this.findById(userToken.id);
+    let childToken;
+
+    if (userToken.replaced_token_id) {
+      childToken = await this.findById(userToken.replaced_token_id);
+    }
 
     if (childToken) {
       this.revokeDescendantRefreshToken({
@@ -61,7 +65,7 @@ export class UsersTokensRepository implements IUsersTokensRepository {
         replacedByToken,
       });
     } else {
-      this.revokeRefreshToken({
+      await this.revokeRefreshToken({
         userToken,
         ipAddress,
         reason,
@@ -74,11 +78,11 @@ export class UsersTokensRepository implements IUsersTokensRepository {
     userToken,
     ipAddress,
     reason,
-    replacedByToken = "",
+    replacedByToken,
   }: IRevokeTokenDTO): Promise<void> {
     const revokedToken = userToken;
 
-    revokedToken.revoked_at = new Date();
+    revokedToken.revoked_at = dateNow();
     revokedToken.revoked_by_ip = ipAddress;
     revokedToken.revoked_reason = reason;
     revokedToken.replaced_token_id = replacedByToken;

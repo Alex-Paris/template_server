@@ -2,6 +2,7 @@ import "reflect-metadata";
 
 // Enviroments
 process.env.APP_SECRET = "jestsecretpass";
+process.env.APP_REFRESH_SECRET = "jestrefreshsecretpass";
 
 // PostgreSQL
 process.env.PG_HOST = "localhost";

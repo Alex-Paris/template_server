@@ -40,7 +40,7 @@ export class UserTokens {
   created_at: Date;
 
   @Column()
-  replaced_token_id: string;
+  replaced_token_id?: string;
 
   @OneToOne(() => UserTokens)
   @JoinColumn({ name: "replaced_token_id" })
