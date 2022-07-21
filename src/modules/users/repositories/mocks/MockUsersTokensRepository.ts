@@ -41,7 +41,8 @@ export class MockUsersTokensRepository implements IUsersTokensRepository {
   ): Promise<UserTokens | undefined> {
     return this.userTokens.find(
       (userToken) =>
-        userToken.id === user_id && userToken.refresh_token === refresh_token
+        userToken.user_id === user_id &&
+        userToken.refresh_token === refresh_token
     );
   }
 
@@ -51,7 +52,11 @@ export class MockUsersTokensRepository implements IUsersTokensRepository {
     reason,
     replacedByToken,
   }: IRevokeTokenDTO): Promise<void> {
-    const childToken = await this.findById(userToken.id);
+    let childToken;
+
+    if (userToken.replaced_token_id) {
+      childToken = await this.findById(userToken.replaced_token_id);
+    }
 
     if (childToken) {
       this.revokeDescendantRefreshToken({
