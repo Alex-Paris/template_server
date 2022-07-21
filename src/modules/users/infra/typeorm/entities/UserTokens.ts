@@ -61,7 +61,7 @@ export class UserTokens {
 
   @Expose({ name: "is_revoked" })
   getIsRevoked(): boolean {
-    return this.revoked_at !== null;
+    return this.revoked_at !== null && this.revoked_at !== undefined;
   }
 
   @Expose({ name: "is_active" })
