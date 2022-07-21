@@ -49,7 +49,7 @@ export class MockUsersTokensRepository implements IUsersTokensRepository {
     userToken,
     ipAddress,
     reason,
-    replacedByToken = "",
+    replacedByToken,
   }: IRevokeTokenDTO): Promise<void> {
     const childToken = await this.findById(userToken.id);
 
@@ -74,7 +74,7 @@ export class MockUsersTokensRepository implements IUsersTokensRepository {
     userToken,
     ipAddress,
     reason,
-    replacedByToken = "",
+    replacedByToken,
   }: IRevokeTokenDTO): Promise<void> {
     const revokedToken = userToken;
 
