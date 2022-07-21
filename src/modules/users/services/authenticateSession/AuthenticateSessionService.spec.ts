@@ -1,9 +1,9 @@
+import { User } from "@modules/users/infra/typeorm/entities/User";
 import { MockUsersRepository } from "@modules/users/repositories/mocks/MockUsersRepository";
 import { MockUsersTokensRepository } from "@modules/users/repositories/mocks/MockUsersTokensRepository";
 
 import { MockHashProvider } from "@shared/containers/providers/HashProvider/mocks/MockHashProvider";
 
-import { ICreateUserDTO } from "../createUser/CreateUserDTO";
 import { AuthenticateSessionError } from "./AuthenticateSessionError";
 import { AuthenticateSessionService } from "./AuthenticateSessionService";
 
@@ -11,20 +11,20 @@ let mockUsersRepository: MockUsersRepository;
 let mockUsersTokensRepository: MockUsersTokensRepository;
 let mockHashProvider: MockHashProvider;
 let authenticateSession: AuthenticateSessionService;
-let authUser: ICreateUserDTO;
+
+let authUser: User;
 
 describe("Authenticate Session Service", () => {
-  beforeAll(() => {
-    // Put new user information inside a var.
-    authUser = {
+  beforeAll(async () => {
+    // Getting mocks components for service.
+    mockUsersRepository = new MockUsersRepository();
+
+    // Create user in mock for session tests
+    authUser = await mockUsersRepository.create({
       name: "Name Sample",
       email: "sample@email.com",
       password: "samplepass",
-    };
-
-    // Create this user in mock for session tests
-    mockUsersRepository = new MockUsersRepository();
-    mockUsersRepository.create(authUser);
+    });
   });
 
   beforeEach(() => {
