@@ -26,7 +26,11 @@ Template for server API with Typescript
 
 *express-async-errors* - Let the possibility to use a class to proccess error messages.
 
+*handlebars* - Uses templates to generate HTML or other text formats.
+
 *jsonwebtoken* - Method to authenticate services in "rest". Divided by 3 parts: Headers, Payload and Signature.
+
+*nodemailer* - Use ethereal for test mail sending.
 
 *pg* - PostgreSQL components.
 
