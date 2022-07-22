@@ -20,4 +20,6 @@ sessionRouter.post(
 
 sessionRouter.post("/refresh-token", sessionController.refresh);
 
+sessionRouter.post("/revoke-token", sessionController.revoke);
+
 export { sessionRouter };

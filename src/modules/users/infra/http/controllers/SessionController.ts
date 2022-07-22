@@ -4,6 +4,7 @@ import { container } from "tsyringe";
 
 import { AuthenticateSessionService } from "@modules/users/services/authenticateSession/AuthenticateSessionService";
 import { RefreshSessionService } from "@modules/users/services/refreshSession/RefreshSessionService";
+import { RevokeSessionService } from "@modules/users/services/revokeSession/RevokeSessionService";
 
 export class SessionController {
   /** Authenticate user session generating a new token and refresh token. */
@@ -72,5 +73,23 @@ export class SessionController {
           token,
         })
     );
+  }
+
+  /** Revoke token for user session, making it inactive. */
+  async revoke(req: Request, res: Response): Promise<Response> {
+    // Get refresh token cookie.
+    const [, refreshToken] = String(req.headers.cookie).split("refresh_token=");
+    // Get remote address for refresh token register.
+    const remote_address = req.socket.remoteAddress as string;
+
+    // Injects containers at service and execute it.
+    const revokeService = container.resolve(RevokeSessionService);
+
+    await revokeService.execute({
+      cookie_refresh_token: refreshToken,
+      remote_address,
+    });
+
+    return res.status(200).send();
   }
 }
