@@ -1,8 +1,8 @@
 import { v4 as uuidV4 } from "uuid";
 
+import { IAuthenticateSessionDTO } from "@modules/users/dtos/IAuthenticateSessionDTO";
+import { IRevokeTokenDTO } from "@modules/users/dtos/IRevokeTokenDTO";
 import { UserTokens } from "@modules/users/infra/typeorm/entities/UserTokens";
-import { IAuthenticateSessionDTO } from "@modules/users/services/authenticateSession/AuthenticateSessionDTO";
-import { IRevokeTokenDTO } from "@modules/users/services/revokeSession/RevokeSessionDTO";
 
 import { addDays, dateNow, isBefore } from "@utils/date";
 

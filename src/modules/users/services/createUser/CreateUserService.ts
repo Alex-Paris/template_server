@@ -1,9 +1,10 @@
 import { IUsersRepository } from "modules/users/repositories/IUsersRepository";
 import { inject, injectable } from "tsyringe";
 
+import { ICreateUserDTO } from "@modules/users/dtos/ICreateUserDTO";
+
 import { IHashProvider } from "@shared/containers/providers/HashProvider/models/IHashProvider";
 
-import { ICreateUserDTO } from "./CreateUserDTO";
 import { CreateUserError } from "./CreateUserError";
 
 @injectable()

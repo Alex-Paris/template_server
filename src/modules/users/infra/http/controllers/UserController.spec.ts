@@ -1,6 +1,6 @@
 import request from "supertest";
 
-import { ICreateUserDTO } from "@modules/users/services/createUser/CreateUserDTO";
+import { ICreateUserDTO } from "@modules/users/dtos/ICreateUserDTO";
 
 import { app } from "@shared/infra/http/app";
 import { pgDataSource } from "@shared/infra/typeorm/data-source";

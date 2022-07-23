@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 
+import { ICreateUserDTO } from "@modules/users/dtos/ICreateUserDTO";
 import { IUsersRepository } from "@modules/users/repositories/IUsersRepository";
-import { ICreateUserDTO } from "@modules/users/services/createUser/CreateUserDTO";
 
 import { pgDataSource } from "@shared/infra/typeorm/data-source";
 

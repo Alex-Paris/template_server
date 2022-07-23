@@ -1,8 +1,8 @@
 import { Repository } from "typeorm";
 
+import { IAuthenticateSessionDTO } from "@modules/users/dtos/IAuthenticateSessionDTO";
+import { IRevokeTokenDTO } from "@modules/users/dtos/IRevokeTokenDTO";
 import { IUsersTokensRepository } from "@modules/users/repositories/IUsersTokensRepository";
-import { IAuthenticateSessionDTO } from "@modules/users/services/authenticateSession/AuthenticateSessionDTO";
-import { IRevokeTokenDTO } from "@modules/users/services/revokeSession/RevokeSessionDTO";
 
 import { pgDataSource } from "@shared/infra/typeorm/data-source";
 

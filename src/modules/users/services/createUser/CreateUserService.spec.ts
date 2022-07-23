@@ -1,9 +1,9 @@
+import { ICreateUserDTO } from "@modules/users/dtos/ICreateUserDTO";
 import { User } from "@modules/users/infra/typeorm/entities/User";
 import { MockUsersRepository } from "@modules/users/repositories/mocks/MockUsersRepository";
 
 import { MockHashProvider } from "@shared/containers/providers/HashProvider/mocks/MockHashProvider";
 
-import { ICreateUserDTO } from "./CreateUserDTO";
 import { CreateUserError } from "./CreateUserError";
 import { CreateUserService } from "./CreateUserService";
 

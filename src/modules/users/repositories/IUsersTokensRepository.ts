@@ -1,6 +1,6 @@
+import { IAuthenticateSessionDTO } from "../dtos/IAuthenticateSessionDTO";
+import { IRevokeTokenDTO } from "../dtos/IRevokeTokenDTO";
 import { UserTokens } from "../infra/typeorm/entities/UserTokens";
-import { IAuthenticateSessionDTO } from "../services/authenticateSession/AuthenticateSessionDTO";
-import { IRevokeTokenDTO } from "../services/revokeSession/RevokeSessionDTO";
 
 export interface IUsersTokensRepository {
   /**
