@@ -2,6 +2,7 @@ import { sign } from "jsonwebtoken";
 import path from "path";
 import { inject, injectable } from "tsyringe";
 
+import { EType } from "@modules/users/infra/typeorm/entities/UserTokens";
 import { IUsersRepository } from "@modules/users/repositories/IUsersRepository";
 import { IUsersTokensRepository } from "@modules/users/repositories/IUsersTokensRepository";
 
@@ -57,6 +58,7 @@ export class ForgotPasswordService {
     // Create a token directed to email to be used in recover link.
     const { refresh_token: token } = await this.usersTokensRepository.create({
       refresh_token: forgot_token,
+      type: EType.forgot_password,
       expires_at: forgot_expiration,
       created_by_ip: remote_address,
       user_id: user.id,

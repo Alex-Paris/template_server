@@ -287,7 +287,7 @@ describe("Revoke Session Controller", () => {
         .where("users_tokens.refresh_token = :refreshToken", { refreshToken })
         .getOne()) || new UserTokens();
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(204);
     expect(userToken).toBeInstanceOf(UserTokens);
     expect(userToken.revoked_reason).toBe("Refresh token revoked by user.");
   });

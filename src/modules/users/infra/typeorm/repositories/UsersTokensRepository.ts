@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 
-import { IAuthenticateSessionDTO } from "@modules/users/dtos/IAuthenticateSessionDTO";
+import { ICreateTokenDTO } from "@modules/users/dtos/ICreateTokenDTO";
 import { IRevokeTokenDTO } from "@modules/users/dtos/IRevokeTokenDTO";
 import { IUsersTokensRepository } from "@modules/users/repositories/IUsersTokensRepository";
 
@@ -17,7 +17,7 @@ export class UsersTokensRepository implements IUsersTokensRepository {
     this.repository = pgDataSource.getRepository(UserTokens);
   }
 
-  async create(data: IAuthenticateSessionDTO): Promise<UserTokens> {
+  async create(data: ICreateTokenDTO): Promise<UserTokens> {
     const userToken = this.repository.create(data);
 
     await this.repository.save(userToken);

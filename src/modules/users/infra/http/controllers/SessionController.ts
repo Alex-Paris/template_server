@@ -90,6 +90,6 @@ export class SessionController {
       remote_address,
     });
 
-    return res.status(200).send();
+    return res.status(204).send();
   }
 }

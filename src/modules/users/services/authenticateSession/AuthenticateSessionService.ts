@@ -2,6 +2,7 @@ import { instanceToInstance } from "class-transformer";
 import { sign } from "jsonwebtoken";
 import { injectable, inject } from "tsyringe";
 
+import { EType } from "@modules/users/infra/typeorm/entities/UserTokens";
 import { IUsersRepository } from "@modules/users/repositories/IUsersRepository";
 import { IUsersTokensRepository } from "@modules/users/repositories/IUsersTokensRepository";
 
@@ -87,6 +88,7 @@ export class AuthenticateSessionService {
     // Create a new refresh token
     await this.usersTokensRepository.create({
       refresh_token,
+      type: EType.refresh_token,
       expires_at: refresh_expiration,
       created_by_ip: remote_address,
       user_id: user.id,

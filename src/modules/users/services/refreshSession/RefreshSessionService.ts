@@ -1,6 +1,7 @@
 import { sign, verify } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
+import { EType } from "@modules/users/infra/typeorm/entities/UserTokens";
 import { IUsersTokensRepository } from "@modules/users/repositories/IUsersTokensRepository";
 
 import auth from "@config/auth";
@@ -102,6 +103,7 @@ export class RefreshSessionService {
     // Replace old refresh token with a new one (rotate token).
     const { id: replacedByToken } = await this.usersTokensRepository.create({
       refresh_token,
+      type: EType.refresh_token,
       expires_at: refresh_expiration,
       created_by_ip: remote_address,
       user_id,

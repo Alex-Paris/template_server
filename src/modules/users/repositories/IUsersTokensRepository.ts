@@ -1,4 +1,4 @@
-import { IAuthenticateSessionDTO } from "../dtos/IAuthenticateSessionDTO";
+import { ICreateTokenDTO } from "../dtos/ICreateTokenDTO";
 import { IRevokeTokenDTO } from "../dtos/IRevokeTokenDTO";
 import { UserTokens } from "../infra/typeorm/entities/UserTokens";
 
@@ -10,7 +10,7 @@ export interface IUsersTokensRepository {
    * @param created_by_ip ip to identify wheres refresh token was requested.
    * @param user_id user identification who requested the token.
    */
-  create(data: IAuthenticateSessionDTO): Promise<UserTokens>;
+  create(data: ICreateTokenDTO): Promise<UserTokens>;
 
   /**
    * Save refresh token for user.

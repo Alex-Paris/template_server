@@ -1,7 +1,10 @@
 import { sign } from "jsonwebtoken";
 
 import { User } from "@modules/users/infra/typeorm/entities/User";
-import { UserTokens } from "@modules/users/infra/typeorm/entities/UserTokens";
+import {
+  EType,
+  UserTokens,
+} from "@modules/users/infra/typeorm/entities/UserTokens";
 import { MockUsersRepository } from "@modules/users/repositories/mocks/MockUsersRepository";
 import { MockUsersTokensRepository } from "@modules/users/repositories/mocks/MockUsersTokensRepository";
 
@@ -46,6 +49,7 @@ describe("Refresh Session Service", () => {
         subject: authUser.id,
         expiresIn: `${auth.jwt.refreshExpiresIn}d`,
       }),
+      type: EType.refresh_token,
       expires_at: addDays(dateNow(), auth.jwt.refreshExpiresIn),
       created_by_ip: "127.0.0.1",
       user_id: authUser.id,

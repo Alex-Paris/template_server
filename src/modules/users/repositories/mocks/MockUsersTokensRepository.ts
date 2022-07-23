@@ -1,6 +1,6 @@
 import { v4 as uuidV4 } from "uuid";
 
-import { IAuthenticateSessionDTO } from "@modules/users/dtos/IAuthenticateSessionDTO";
+import { ICreateTokenDTO } from "@modules/users/dtos/ICreateTokenDTO";
 import { IRevokeTokenDTO } from "@modules/users/dtos/IRevokeTokenDTO";
 import { UserTokens } from "@modules/users/infra/typeorm/entities/UserTokens";
 
@@ -11,7 +11,7 @@ import { IUsersTokensRepository } from "../IUsersTokensRepository";
 export class MockUsersTokensRepository implements IUsersTokensRepository {
   private userTokens: UserTokens[] = [];
 
-  async create(data: IAuthenticateSessionDTO): Promise<UserTokens> {
+  async create(data: ICreateTokenDTO): Promise<UserTokens> {
     const userToken = new UserTokens();
 
     Object.assign(userToken, { id: uuidV4() }, data);

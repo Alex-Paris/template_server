@@ -13,6 +13,14 @@ import { dateNow, isBefore } from "@utils/date";
 
 import { User } from "./User";
 
+export type TType = "refresh_token" | "forgot_password" | "create_user";
+
+export enum EType {
+  refresh_token,
+  forgot_password,
+  create_user,
+}
+
 @Entity("users_tokens")
 export class UserTokens {
   @PrimaryGeneratedColumn("uuid")
@@ -22,7 +30,7 @@ export class UserTokens {
   refresh_token: string;
 
   @Column()
-  type: number;
+  type: EType;
 
   @Column("time with time zone")
   expires_at: Date;
@@ -60,9 +68,9 @@ export class UserTokens {
   @Expose({ name: "description_type" })
   getType(): string {
     switch (this.type) {
-      case 0:
+      case EType.refresh_token:
         return "Refresh token";
-      case 1:
+      case EType.forgot_password:
         return "Recovery password token";
       default:
         return "Not expected type";
