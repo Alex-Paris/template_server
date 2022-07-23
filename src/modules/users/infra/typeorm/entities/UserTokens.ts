@@ -21,6 +21,9 @@ export class UserTokens {
   @Column()
   refresh_token: string;
 
+  @Column()
+  type: number;
+
   @Column("time with time zone")
   expires_at: Date;
 
@@ -53,6 +56,18 @@ export class UserTokens {
   @ManyToOne(() => User)
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @Expose({ name: "description_type" })
+  getType(): string {
+    switch (this.type) {
+      case 0:
+        return "Refresh token";
+      case 1:
+        return "Recovery password token";
+      default:
+        return "Not expected type";
+    }
+  }
 
   @Expose({ name: "is_expired" })
   getIsExpired(): boolean {

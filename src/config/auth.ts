@@ -13,5 +13,10 @@ export default {
      * deleted from the database after this time.
      */
     refreshTTL: 3,
+
+    /** Secret code to encrypt/decrypt JWT forgot password tokens. */
+    forgotSecret: process.env.APP_FORGOT_SECRET || "default",
+    /** Expiration time for forgot token (in hours). */
+    forgotExpiresIn: 2,
   },
 };

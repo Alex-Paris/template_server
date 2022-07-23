@@ -62,6 +62,10 @@ export class CreateInitialTemplate1657764542737 implements MigrationInterface {
             type: "varchar",
           },
           {
+            name: "type",
+            type: "integer",
+          },
+          {
             name: "expires_at",
             type: "timestamp",
           },
