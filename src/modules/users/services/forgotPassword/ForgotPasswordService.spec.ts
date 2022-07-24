@@ -68,6 +68,7 @@ describe("Forgot Password Service", () => {
       remote_address: "127.0.0.1",
     });
 
+    // Gets token returned in mock or create a new one if its null.
     const forgotToken = (await createToken.mock.results[0].value) as UserTokens;
 
     expect(createToken).toHaveBeenCalled();

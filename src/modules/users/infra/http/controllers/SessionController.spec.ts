@@ -9,6 +9,7 @@ import { delay } from "@utils/utils";
 import { UserTokens } from "../../typeorm/entities/UserTokens";
 
 let authUser: Record<string, unknown>;
+let refreshToken: string;
 
 describe("Authenticate Session Controller", () => {
   beforeAll(async () => {
@@ -84,8 +85,6 @@ describe("Authenticate Session Controller", () => {
     expect(response.status).toBe(401);
   });
 });
-
-let refreshToken: string;
 
 describe("Refresh Session Controller", () => {
   beforeAll(async () => {
