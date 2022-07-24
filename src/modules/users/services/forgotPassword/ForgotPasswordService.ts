@@ -10,7 +10,7 @@ import auth from "@config/auth";
 
 import { IMailProvider } from "@shared/containers/providers/MailProvider/models/IMailProvider";
 
-import { addDays, dateNow } from "@utils/date";
+import { addHours, dateNow } from "@utils/date";
 
 import { ForgotPasswordError } from "./ForgotPasswordError";
 
@@ -53,7 +53,7 @@ export class ForgotPasswordService {
     });
 
     // Getting forgot token expiration date.
-    const forgot_expiration = addDays(dateNow(), forgotExpiresIn);
+    const forgot_expiration = addHours(dateNow(), forgotExpiresIn);
 
     // Create a token directed to email to be used in recover link.
     const { refresh_token: token } = await this.usersTokensRepository.create({

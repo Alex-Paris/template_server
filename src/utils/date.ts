@@ -63,6 +63,15 @@ export function dateNow(): Date {
 }
 
 /**
+ * Add hours inside a date.
+ * @param date date to have hours added.
+ * @param amount amount in number of hours to add in date.
+ */
+export function addHours(date: Date, amount: number): Date {
+  return dayjs(convertToUTC(date)).add(amount, "hours").toDate();
+}
+
+/**
  * Add days inside a date.
  * @param date date to have days added.
  * @param amount amount in number of days to add in date.
