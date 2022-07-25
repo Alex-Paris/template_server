@@ -1,5 +1,9 @@
 import request from "supertest";
 
+import { AuthenticateSessionError } from "@modules/users/services/authenticateSession/AuthenticateSessionError";
+import { RefreshSessionError } from "@modules/users/services/refreshSession/RefreshSessionError";
+import { RevokeSessionError } from "@modules/users/services/revokeSession/RevokeSessionError";
+
 import { app } from "@shared/infra/http/app";
 import { pgDataSource } from "@shared/infra/typeorm/data-source";
 
@@ -71,7 +75,12 @@ describe("Authenticate Session Controller", () => {
         password: authUser.password,
       });
 
-    expect(response.status).toBe(401);
+    // Get code and message error expected.
+    const { statusCode, message } =
+      new AuthenticateSessionError.IncorrectEmailOrPasswordError();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 
   it("should not be able to authenticate with an invalid password", async () => {
@@ -82,7 +91,12 @@ describe("Authenticate Session Controller", () => {
         password: "invalid-pass",
       });
 
-    expect(response.status).toBe(401);
+    // Get code and message error expected.
+    const { statusCode, message } =
+      new AuthenticateSessionError.IncorrectEmailOrPasswordError();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 });
 
@@ -171,7 +185,12 @@ describe("Refresh Session Controller", () => {
       .set("Accept-Language", "en")
       .set("Cookie", ["invalid-refresh-token"]);
 
-    expect(response.status).toBe(401);
+    // Get code and message error expected.
+    const { statusCode, message } =
+      new RefreshSessionError.RefreshTokenInvalid();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 
   it("should not be able to refresh with an unfound token", async () => {
@@ -188,7 +207,12 @@ describe("Refresh Session Controller", () => {
       .set("Accept-Language", "en")
       .set("Cookie", [`refresh_token=${refreshToken}`]);
 
-    expect(response.status).toBe(401);
+    // Get code and message error expected.
+    const { statusCode, message } =
+      new RefreshSessionError.RefreshTokenNotFound();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 
   it("should not be able to refresh with an expired token", async () => {
@@ -201,7 +225,12 @@ describe("Refresh Session Controller", () => {
       .set("Accept-Language", "en")
       .set("Cookie", [`refresh_token=${refreshToken}`]);
 
-    expect(response.status).toBe(401);
+    // Get code and message error expected.
+    const { statusCode, message } =
+      new RefreshSessionError.RefreshTokenExpired();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 
   it("should not be able to refresh with a revoked token", async () => {
@@ -215,7 +244,12 @@ describe("Refresh Session Controller", () => {
       .set("Accept-Language", "en")
       .set("Cookie", [`refresh_token=${refreshToken}`]);
 
-    expect(response.status).toBe(401);
+    // Get code and message error expected.
+    const { statusCode, message } =
+      new RefreshSessionError.RefreshTokenRevoked();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 });
 
@@ -297,7 +331,12 @@ describe("Revoke Session Controller", () => {
       .set("Accept-Language", "en")
       .set("Cookie", ["invalid-refresh-token"]);
 
-    expect(response.status).toBe(401);
+    // Get code and message error expected.
+    const { statusCode, message } =
+      new RevokeSessionError.RefreshTokenInvalid();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 
   it("should not be able to revoke with an unfound token", async () => {
@@ -314,7 +353,12 @@ describe("Revoke Session Controller", () => {
       .set("Accept-Language", "en")
       .set("Cookie", [`refresh_token=${refreshToken}`]);
 
-    expect(response.status).toBe(401);
+    // Get code and message error expected.
+    const { statusCode, message } =
+      new RevokeSessionError.RefreshTokenNotFound();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 
   it("should not be able to revoke with an expired token", async () => {
@@ -327,7 +371,12 @@ describe("Revoke Session Controller", () => {
       .set("Accept-Language", "en")
       .set("Cookie", [`refresh_token=${refreshToken}`]);
 
-    expect(response.status).toBe(401);
+    // Get code and message error expected.
+    const { statusCode, message } =
+      new RevokeSessionError.RefreshTokenExpired();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 
   it("should not be able to revoke with a revoked token", async () => {
@@ -341,6 +390,11 @@ describe("Revoke Session Controller", () => {
       .set("Accept-Language", "en")
       .set("Cookie", [`refresh_token=${refreshToken}`]);
 
-    expect(response.status).toBe(401);
+    // Get code and message error expected.
+    const { statusCode, message } =
+      new RevokeSessionError.RefreshTokenRevoked();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 });

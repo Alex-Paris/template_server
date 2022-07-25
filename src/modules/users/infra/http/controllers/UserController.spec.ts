@@ -1,6 +1,7 @@
 import request from "supertest";
 
 import { ICreateUserDTO } from "@modules/users/dtos/ICreateUserDTO";
+import { CreateUserError } from "@modules/users/services/createUser/CreateUserError";
 
 import { app } from "@shared/infra/http/app";
 import { pgDataSource } from "@shared/infra/typeorm/data-source";
@@ -48,6 +49,10 @@ describe("User Controller", () => {
   it("should not be able to create an user if inserted email already exists", async () => {
     const response = await request(app).post("/api/v1/user").send(newUser);
 
-    expect(response.status).toBe(400);
+    // Get code and message error expected.
+    const { statusCode, message } = new CreateUserError.EmailAlreadyUsed();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 });

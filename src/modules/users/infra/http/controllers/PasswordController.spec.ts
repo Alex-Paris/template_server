@@ -1,6 +1,8 @@
 import { verify } from "jsonwebtoken";
 import request from "supertest";
 
+import { ForgotPasswordError } from "@modules/users/services/forgotPassword/ForgotPasswordError";
+
 import auth from "@config/auth";
 
 import { EtherealMailProvider } from "@shared/containers/providers/MailProvider/implementations/EtherealMailProvider";
@@ -75,6 +77,10 @@ describe("Forgot Password Controller", () => {
       email: "invalid@email.com",
     });
 
-    expect(response.status).toBe(404);
+    // Get code and message error expected.
+    const { statusCode, message } = new ForgotPasswordError.UserNotFound();
+
+    expect(response.status).toBe(statusCode);
+    expect(response.body.message).toBe(message);
   });
 });
