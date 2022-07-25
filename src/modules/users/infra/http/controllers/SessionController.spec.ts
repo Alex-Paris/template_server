@@ -1,8 +1,11 @@
+import { verify } from "jsonwebtoken";
 import request from "supertest";
 
 import { AuthenticateSessionError } from "@modules/users/services/authenticateSession/AuthenticateSessionError";
 import { RefreshSessionError } from "@modules/users/services/refreshSession/RefreshSessionError";
 import { RevokeSessionError } from "@modules/users/services/revokeSession/RevokeSessionError";
+
+import auth from "@config/auth";
 
 import { app } from "@shared/infra/http/app";
 import { pgDataSource } from "@shared/infra/typeorm/data-source";
@@ -10,7 +13,7 @@ import { pgDataSource } from "@shared/infra/typeorm/data-source";
 import * as utilDate from "@utils/date";
 import { delay } from "@utils/utils";
 
-import { UserTokens } from "../../typeorm/entities/UserTokens";
+import { EType, UserTokens } from "../../typeorm/entities/UserTokens";
 
 let authUser: Record<string, unknown>;
 let refreshToken: string;
@@ -53,18 +56,24 @@ describe("Authenticate Session Controller", () => {
       });
 
     // Get the refresh token saved at database for expecting test analisys.
-    const userToken = await pgDataSource
+    const userToken = (await pgDataSource
       .createQueryBuilder<UserTokens>(UserTokens, "users_tokens")
       .where("users_tokens.user_id = :id", { id: authUser.id })
-      .getOne();
+      .getOne()) as UserTokens;
+
+    // Extract content to be used in expect.
+    const cookedToken = String(response.header["set-cookie"]).split("; ")[0];
+    const { compareInDays } = utilDate;
+    const { refreshSecret, refreshExpiresIn } = auth.jwt;
+    const { type, refresh_token, created_at, expires_at } = userToken;
 
     expect(response.status).toBe(200);
-    expect(userToken).toBeInstanceOf(UserTokens);
+    expect(type).toBe(EType.refresh_token);
     expect(response.body).toHaveProperty("token");
     expect(response.body.user.id).toBe(authUser.id);
-    expect(String(response.header["set-cookie"]).split("; ")[0]).toContain(
-      userToken?.refresh_token
-    );
+    expect(cookedToken).toContain(refresh_token);
+    expect(verify(refresh_token, refreshSecret));
+    expect(compareInDays(created_at, expires_at)).toBe(refreshExpiresIn);
   });
 
   it("should not be able to authenticate with an invalid email", async () => {
@@ -165,18 +174,24 @@ describe("Refresh Session Controller", () => {
     [, refreshToken] = String(refreshToken).split("refresh_token=");
 
     // Get the refresh token saved at database for expecting test analisys.
-    const userToken = await pgDataSource
+    const userToken = (await pgDataSource
       .createQueryBuilder<UserTokens>(UserTokens, "users_tokens")
       .where("users_tokens.refresh_token = :refreshToken", { refreshToken })
-      .getOne();
+      .getOne()) as UserTokens;
+
+    // Extract content to be used in expect.
+    const cookedToken = String(response.header["set-cookie"]).split("; ")[0];
+    const { compareInDays } = utilDate;
+    const { refreshSecret, refreshExpiresIn } = auth.jwt;
+    const { type, refresh_token, created_at, expires_at } = userToken;
 
     expect(response.status).toBe(200);
-    expect(userToken).toBeInstanceOf(UserTokens);
     expect(response.body).toHaveProperty("token");
     // expect(response.body.user.id).toBe(authUser.id);
-    expect(String(response.header["set-cookie"]).split("; ")[0]).toContain(
-      userToken?.refresh_token
-    );
+    expect(cookedToken).toContain(refresh_token);
+    expect(type).toBe(EType.refresh_token);
+    expect(verify(refresh_token, refreshSecret));
+    expect(compareInDays(created_at, expires_at)).toBe(refreshExpiresIn);
   });
 
   it("should not be able to refresh with an invalid token", async () => {
