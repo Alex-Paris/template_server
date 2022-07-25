@@ -34,12 +34,12 @@ export class CreateInitialTemplate1657764542737 implements MigrationInterface {
           },
           {
             name: "created_at",
-            type: "timestamp",
+            type: "timestamptz",
             default: "now()",
           },
           {
             name: "updated_at",
-            type: "timestamp",
+            type: "timestamptz",
             default: "now()",
           },
         ],
@@ -67,7 +67,7 @@ export class CreateInitialTemplate1657764542737 implements MigrationInterface {
           },
           {
             name: "expires_at",
-            type: "timestamp",
+            type: "timestamptz",
           },
           {
             name: "revoked_by_ip",
@@ -76,7 +76,7 @@ export class CreateInitialTemplate1657764542737 implements MigrationInterface {
           },
           {
             name: "revoked_at",
-            type: "timestamp",
+            type: "timestamptz",
             isNullable: true,
           },
           {
@@ -90,7 +90,7 @@ export class CreateInitialTemplate1657764542737 implements MigrationInterface {
           },
           {
             name: "created_at",
-            type: "timestamp",
+            type: "timestamptz",
             default: "now()",
           },
           {

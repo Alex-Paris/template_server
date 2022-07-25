@@ -8,6 +8,14 @@ dayjs.extend(utc);
  * @param date date to be converted.
  */
 export function convertToUTC(date: Date): string {
+  return dayjs(date).utc().format();
+}
+
+/**
+ * Convert date in local time (with local timezone).
+ * @param date date to be converted.
+ */
+export function convertToLocal(date: Date): string {
   return dayjs(date).utc().local().format();
 }
 
