@@ -11,12 +11,12 @@ export class PasswordController {
     // Get requested email with password was forgotten.
     const { email } = req.body;
     // Get remote address for refresh token register.
-    const remote_address = req.socket.remoteAddress as string;
+    const remoteAddress = req.socket.remoteAddress as string;
 
     // Injects containers at service and execute it.
     const forgotService = container.resolve(ForgotPasswordService);
 
-    await forgotService.execute({ email, remote_address });
+    await forgotService.execute({ email, remoteAddress });
 
     return res.status(204).send();
   }

@@ -25,14 +25,14 @@ export class User {
   @Column()
   avatar: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: "created_at" })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt: Date;
 
   /** Get avatar url depending of it's storaged local. */
-  @Expose({ name: "avatar_url" })
+  @Expose({ name: "avatarUrl" })
   getAvatarUrl(): string | null {
     if (!this.avatar) {
       return null;

@@ -57,7 +57,7 @@ describe("Forgot Password Service", () => {
     // Request recovery password mail.
     await forgotPasswordService.execute({
       email: testUser.email,
-      remote_address: "127.0.0.1",
+      remoteAddress: "127.0.0.1",
     });
 
     // Gets token returned in mock or create a new one if its null.
@@ -65,28 +65,22 @@ describe("Forgot Password Service", () => {
 
     // Get the refresh token saved at mock provider for expecting test analisys.
     const { forgotSecret, forgotExpiresIn } = auth.jwt;
-    const {
-      type,
-      created_at,
-      created_by_ip,
-      expires_at,
-      refresh_token,
-      user_id,
-    } = forgotToken;
+    const { type, createdAt, createdByIp, expiresAt, refreshToken, userId } =
+      forgotToken;
 
     expect(sendMail).toHaveBeenCalled();
-    expect(type).toBe(EType.forgot_password);
-    expect(verify(refresh_token, forgotSecret));
-    expect(user_id).toBe(testUser.id);
-    expect(created_by_ip).toBe("127.0.0.1");
-    expect(compareInHours(created_at, expires_at)).toBe(forgotExpiresIn);
+    expect(type).toBe(EType.forgotPassword);
+    expect(verify(refreshToken, forgotSecret));
+    expect(userId).toBe(testUser.id);
+    expect(createdByIp).toBe("127.0.0.1");
+    expect(compareInHours(createdAt, expiresAt)).toBe(forgotExpiresIn);
   });
 
   it("should not be able to recover with an unfound email", async () => {
     await expect(
       forgotPasswordService.execute({
         email: "invalid@email.com",
-        remote_address: "127.0.0.1",
+        remoteAddress: "127.0.0.1",
       })
     ).rejects.toBeInstanceOf(ForgotPasswordError.UserNotFound);
   });

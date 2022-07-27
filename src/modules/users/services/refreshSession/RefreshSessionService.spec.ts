@@ -47,32 +47,32 @@ describe("Refresh Session Service", () => {
 
     // Create a new refresh token
     refreshToken = await mockUsersTokensRepository.create({
-      refresh_token: sign({ email }, auth.jwt.refreshSecret, {
+      refreshToken: sign({ email }, auth.jwt.refreshSecret, {
         subject: authUser.id,
         expiresIn: `${auth.jwt.refreshExpiresIn}d`,
       }),
-      type: EType.refresh_token,
-      expires_at: addDays(dateNow(), auth.jwt.refreshExpiresIn),
-      created_by_ip: "127.0.0.1",
-      user_id: authUser.id,
+      type: EType.refreshToken,
+      expiresAt: addDays(dateNow(), auth.jwt.refreshExpiresIn),
+      createdByIp: "127.0.0.1",
+      userId: authUser.id,
     });
   });
 
   it("should be able to refresh user session", async () => {
     const response = await refreshSessionService.execute({
-      cookie_refresh_token: refreshToken.refresh_token,
-      remote_address: "127.0.0.1",
+      cookieRefreshToken: refreshToken.refreshToken,
+      remoteAddress: "127.0.0.1",
     });
 
     expect(response).toHaveProperty("token");
-    expect(response).toHaveProperty("refresh_token");
+    expect(response).toHaveProperty("refreshToken");
   });
 
   it("should not be able to refresh with an invalid token", async () => {
     await expect(
       refreshSessionService.execute({
-        cookie_refresh_token: "invalid-refresh-token",
-        remote_address: "127.0.0.1",
+        cookieRefreshToken: "invalid-refresh-token",
+        remoteAddress: "127.0.0.1",
       })
     ).rejects.toBeInstanceOf(RefreshSessionError.RefreshTokenInvalid);
   });
@@ -82,8 +82,8 @@ describe("Refresh Session Service", () => {
 
     await expect(
       refreshSessionService.execute({
-        cookie_refresh_token: refreshToken.refresh_token,
-        remote_address: "127.0.0.1",
+        cookieRefreshToken: refreshToken.refreshToken,
+        remoteAddress: "127.0.0.1",
       })
     ).rejects.toBeInstanceOf(RefreshSessionError.RefreshTokenNotFound);
   });
@@ -95,22 +95,22 @@ describe("Refresh Session Service", () => {
 
     await expect(
       refreshSessionService.execute({
-        cookie_refresh_token: refreshToken.refresh_token,
-        remote_address: "127.0.0.1",
+        cookieRefreshToken: refreshToken.refreshToken,
+        remoteAddress: "127.0.0.1",
       })
     ).rejects.toBeInstanceOf(RefreshSessionError.RefreshTokenExpired);
   });
 
   it("should not be able to refresh with an revoked token", async () => {
     await refreshSessionService.execute({
-      cookie_refresh_token: refreshToken.refresh_token,
-      remote_address: "127.0.0.1",
+      cookieRefreshToken: refreshToken.refreshToken,
+      remoteAddress: "127.0.0.1",
     });
 
     await expect(
       refreshSessionService.execute({
-        cookie_refresh_token: refreshToken.refresh_token,
-        remote_address: "127.0.0.1",
+        cookieRefreshToken: refreshToken.refreshToken,
+        remoteAddress: "127.0.0.1",
       })
     ).rejects.toBeInstanceOf(RefreshSessionError.RefreshTokenRevoked);
   });

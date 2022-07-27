@@ -36,13 +36,12 @@ export class MockUsersTokensRepository implements IUsersTokensRepository {
   }
 
   async findByUserIdAndRefreshToken(
-    user_id: string,
-    refresh_token: string
+    userId: string,
+    refreshToken: string
   ): Promise<UserTokens | undefined> {
     return this.userTokens.find(
       (userToken) =>
-        userToken.user_id === user_id &&
-        userToken.refresh_token === refresh_token
+        userToken.userId === userId && userToken.refreshToken === refreshToken
     );
   }
 
@@ -54,8 +53,8 @@ export class MockUsersTokensRepository implements IUsersTokensRepository {
   }: IRevokeTokenDTO): Promise<void> {
     let childToken;
 
-    if (userToken.replaced_token_id) {
-      childToken = await this.findById(userToken.replaced_token_id);
+    if (userToken.replacedTokenId) {
+      childToken = await this.findById(userToken.replacedTokenId);
     }
 
     if (childToken) {
@@ -83,21 +82,21 @@ export class MockUsersTokensRepository implements IUsersTokensRepository {
   }: IRevokeTokenDTO): Promise<void> {
     const revokedToken = userToken;
 
-    revokedToken.revoked_at = new Date();
-    revokedToken.revoked_by_ip = ipAddress;
-    revokedToken.revoked_reason = reason;
-    revokedToken.replaced_token_id = replacedByToken;
+    revokedToken.revokedAt = new Date();
+    revokedToken.revokedByIp = ipAddress;
+    revokedToken.revokedReason = reason;
+    revokedToken.replacedTokenId = replacedByToken;
 
     await this.save(revokedToken);
   }
 
-  async deleteOldRefreshTokens(user_id: string): Promise<void> {
+  async deleteOldRefreshTokens(userId: string): Promise<void> {
     const userTokens = this.userTokens.filter(
-      (findToken) => findToken.user_id === user_id
+      (findToken) => findToken.userId === userId
     );
 
     userTokens.forEach(async (userToken) => {
-      const deleteDate = addDays(userToken.created_at, 10);
+      const deleteDate = addDays(userToken.createdAt, 10);
 
       if (!userToken.getIsActive() && isBefore(deleteDate, dateNow())) {
         this.deleteById(userToken.id);

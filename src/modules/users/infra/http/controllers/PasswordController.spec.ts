@@ -63,13 +63,13 @@ describe("Forgot Password Controller", () => {
       .getOne()) as UserTokens;
 
     const { forgotSecret, forgotExpiresIn } = auth.jwt;
-    const { type, created_at, expires_at, refresh_token } = userToken;
+    const { type, createdAt, expiresAt, refreshToken } = userToken;
 
     expect(response.status).toBe(204);
     expect(sendMail).toHaveBeenCalled();
-    expect(type).toBe(EType.forgot_password);
-    expect(verify(refresh_token, forgotSecret));
-    expect(compareInHours(created_at, expires_at)).toBe(forgotExpiresIn);
+    expect(type).toBe(EType.forgotPassword);
+    expect(verify(refreshToken, forgotSecret));
+    expect(compareInHours(createdAt, expiresAt)).toBe(forgotExpiresIn);
   });
 
   it("should not be able to request a forgot password with an unfound email", async () => {

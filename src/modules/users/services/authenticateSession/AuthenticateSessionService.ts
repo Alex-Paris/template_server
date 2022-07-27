@@ -18,14 +18,14 @@ import { AuthenticateSessionError } from "./AuthenticateSessionError";
 interface IRequestDTO {
   email: string;
   password: string;
-  remote_address: string;
+  remoteAddress: string;
 }
 
 interface IResponse {
   user: User;
   token: string;
-  refresh_token: string;
-  refresh_expiration: Date;
+  refreshToken: string;
+  refreshExpiration: Date;
 }
 
 @injectable()
@@ -45,12 +45,12 @@ export class AuthenticateSessionService {
    * Authenticate user session.
    * @param email email of the user. Must not exist in repository.
    * @param password password of the user.
-   * @param remote_address ip address of request user.
+   * @param remoteAddress ip address of request user.
    */
   public async execute({
     email,
     password,
-    remote_address,
+    remoteAddress,
   }: IRequestDTO): Promise<IResponse> {
     const user = await this.usersRepository.findByEmail(email);
 
@@ -77,21 +77,21 @@ export class AuthenticateSessionService {
       expiresIn,
     });
 
-    const refresh_token = sign({ email }, refreshSecret, {
+    const refreshToken = sign({ email }, refreshSecret, {
       subject: user.id,
       expiresIn: `${refreshExpiresIn}d`,
     });
 
     // Getting refresh token expiration date for cookie
-    const refresh_expiration = addDays(dateNow(), refreshExpiresIn);
+    const refreshExpiration = addDays(dateNow(), refreshExpiresIn);
 
     // Create a new refresh token
     await this.usersTokensRepository.create({
-      refresh_token,
-      type: EType.refresh_token,
-      expires_at: refresh_expiration,
-      created_by_ip: remote_address,
-      user_id: user.id,
+      refreshToken,
+      type: EType.refreshToken,
+      expiresAt: refreshExpiration,
+      createdByIp: remoteAddress,
+      userId: user.id,
     });
 
     // Remove old refresh tokens from user
@@ -100,8 +100,8 @@ export class AuthenticateSessionService {
     return {
       user: instanceToInstance(user),
       token,
-      refresh_token,
-      refresh_expiration,
+      refreshToken,
+      refreshExpiration,
     };
   }
 }

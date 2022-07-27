@@ -8,8 +8,8 @@ import auth from "@config/auth";
 import { RevokeSessionError } from "./RevokeSessionError";
 
 interface IRequestDTO {
-  cookie_refresh_token: string;
-  remote_address: string;
+  cookieRefreshToken: string;
+  remoteAddress: string;
 }
 
 interface ITokenPayload {
@@ -28,12 +28,12 @@ export class RevokeSessionService {
 
   /**
    * Refresh token for user session.
-   * @param cookie_refresh_token refresh token forneced in a cookies request.
-   * @param remote_address ip address of request user.
+   * @param cookieRefreshToken refresh token forneced in a cookies request.
+   * @param remoteAddress ip address of request user.
    */
   async execute({
-    cookie_refresh_token,
-    remote_address,
+    cookieRefreshToken,
+    remoteAddress,
   }: IRequestDTO): Promise<void> {
     const { refreshSecret } = auth.jwt;
 
@@ -41,18 +41,18 @@ export class RevokeSessionService {
 
     // Validating if refresh token is a valid JWT.
     try {
-      decoded = verify(cookie_refresh_token, refreshSecret);
+      decoded = verify(cookieRefreshToken, refreshSecret);
     } catch {
       throw new RevokeSessionError.RefreshTokenInvalid();
     }
 
     // Obtaining refresh token data and database information.
-    const { sub: user_id } = decoded as ITokenPayload;
+    const { sub: userId } = decoded as ITokenPayload;
 
     const userToken =
       await this.usersTokensRepository.findByUserIdAndRefreshToken(
-        user_id,
-        cookie_refresh_token
+        userId,
+        cookieRefreshToken
       );
 
     // Validating if refresh token was not found in database.
@@ -73,11 +73,11 @@ export class RevokeSessionService {
     // Revoke refresh token
     await this.usersTokensRepository.revokeRefreshToken({
       userToken,
-      ipAddress: remote_address,
+      ipAddress: remoteAddress,
       reason: "Refresh token revoked by user.",
     });
 
     // Remove old refresh tokens from user.
-    await this.usersTokensRepository.deleteOldRefreshTokens(user_id);
+    await this.usersTokensRepository.deleteOldRefreshTokens(userId);
   }
 }

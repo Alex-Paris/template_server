@@ -16,7 +16,7 @@ import { ForgotPasswordError } from "./ForgotPasswordError";
 
 interface IRequestDTO {
   email: string;
-  remote_address: string;
+  remoteAddress: string;
 }
 
 @injectable()
@@ -35,8 +35,9 @@ export class ForgotPasswordService {
   /**
    * Send a recover password mail to the requested email.
    * @param email forneced to be recovered.
+   * @param remoteAddress ip address of request user.
    */
-  async execute({ email, remote_address }: IRequestDTO): Promise<void> {
+  async execute({ email, remoteAddress }: IRequestDTO): Promise<void> {
     const { forgotSecret, forgotExpiresIn } = auth.jwt;
 
     // Find and validate if requested email was found.
@@ -47,21 +48,21 @@ export class ForgotPasswordService {
     }
 
     // Generate new forgot password token.
-    const forgot_token = sign({ email }, forgotSecret, {
+    const forgotToken = sign({ email }, forgotSecret, {
       subject: user.id,
       expiresIn: `${forgotExpiresIn}h`,
     });
 
     // Getting forgot token expiration date.
-    const forgot_expiration = addHours(dateNow(), forgotExpiresIn);
+    const forgotExpiration = addHours(dateNow(), forgotExpiresIn);
 
     // Create a token directed to email to be used in recover link.
-    const { refresh_token: token } = await this.usersTokensRepository.create({
-      refresh_token: forgot_token,
-      type: EType.forgot_password,
-      expires_at: forgot_expiration,
-      created_by_ip: remote_address,
-      user_id: user.id,
+    const { refreshToken: token } = await this.usersTokensRepository.create({
+      refreshToken: forgotToken,
+      type: EType.forgotPassword,
+      expiresAt: forgotExpiration,
+      createdByIp: remoteAddress,
+      userId: user.id,
     });
 
     // Remove old refresh and forgot tokens from user.

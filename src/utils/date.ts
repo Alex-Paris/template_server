@@ -23,42 +23,42 @@ export function convertToLocal(date: Date): string {
  * Compare if a date is before another. Returns _true_ if compared date is
  * after it.
  * @param date date to check.
- * @param compared_date date to be compared.
+ * @param comparedDate date to be compared.
  */
-export function isBefore(date: Date, compared_date: Date): boolean {
-  return dayjs(date).isBefore(compared_date);
+export function isBefore(date: Date, comparedDate: Date): boolean {
+  return dayjs(date).isBefore(comparedDate);
 }
 
 /**
  * Compare if a date is after another. Returns _true_ if compared date is
  * before it.
  * @param date date to check.
- * @param compared_date date to be compared.
+ * @param comparedDate date to be compared.
  */
-export function isAfter(date: Date, compared_date: Date): boolean {
-  return dayjs(date).isAfter(compared_date);
+export function isAfter(date: Date, comparedDate: Date): boolean {
+  return dayjs(date).isAfter(comparedDate);
 }
 
 /**
  * Compare dates in hours. Returns the amount in number.
- * @param start_date initial date.
- * @param end_date final date.
+ * @param startDate initial date.
+ * @param endDate final date.
  */
-export function compareInHours(start_date: Date, end_date: Date): number {
-  const startDateFormatted = convertToUTC(start_date);
-  const endDateFormatted = convertToUTC(end_date);
+export function compareInHours(startDate: Date, endDate: Date): number {
+  const startDateFormatted = convertToUTC(startDate);
+  const endDateFormatted = convertToUTC(endDate);
 
   return dayjs(endDateFormatted).diff(startDateFormatted, "hours");
 }
 
 /**
  * Compare dates in days. Returns the amount in number.
- * @param start_date initial date.
- * @param end_date final date.
+ * @param startDate initial date.
+ * @param endDate final date.
  */
-export function compareInDays(start_date: Date, end_date: Date): number {
-  const startDateFormatted = convertToUTC(start_date);
-  const endDateFormatted = convertToUTC(end_date);
+export function compareInDays(startDate: Date, endDate: Date): number {
+  const startDateFormatted = convertToUTC(startDate);
+  const endDateFormatted = convertToUTC(endDate);
 
   return dayjs(endDateFormatted).diff(startDateFormatted, "days");
 }

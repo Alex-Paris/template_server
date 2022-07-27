@@ -13,12 +13,12 @@ import { dateNow, isBefore } from "@utils/date";
 
 import { User } from "./User";
 
-export type TType = "refresh_token" | "forgot_password" | "create_user";
+export type TType = "refreshToken" | "forgotPassword" | "createUser";
 
 export enum EType {
-  refresh_token,
-  forgot_password,
-  create_user,
+  refreshToken,
+  forgotPassword,
+  createUser,
 }
 
 @Entity("users_tokens")
@@ -26,68 +26,68 @@ export class UserTokens {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
-  refresh_token: string;
+  @Column({ name: "refresh_token" })
+  refreshToken: string;
 
   @Column()
   type: EType;
 
-  @Column("time with time zone")
-  expires_at: Date;
+  @Column("time with time zone", { name: "expires_at" })
+  expiresAt: Date;
 
-  @Column()
-  revoked_by_ip: string;
+  @Column({ name: "revoked_by_ip" })
+  revokedByIp: string;
 
-  @Column("time with time zone")
-  revoked_at: Date;
+  @Column("time with time zone", { name: "revoked_at" })
+  revokedAt: Date;
 
-  @Column()
-  revoked_reason: string;
+  @Column({ name: "revoked_reason" })
+  revokedReason: string;
 
-  @Column()
-  created_by_ip: string;
+  @Column({ name: "created_by_ip" })
+  createdByIp: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: "created_at" })
+  createdAt: Date;
 
-  @Column()
-  replaced_token_id?: string;
+  @Column({ name: "replaced_token_id" })
+  replacedTokenId?: string;
 
   @OneToOne(() => UserTokens)
   @JoinColumn({ name: "replaced_token_id" })
   // eslint-disable-next-line no-use-before-define
-  replaced_token: UserTokens;
+  replacedToken: UserTokens;
 
-  @Column()
-  user_id: string;
+  @Column({ name: "user_id" })
+  userId: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @Expose({ name: "description_type" })
+  @Expose({ name: "descriptionType" })
   getType(): string {
     switch (this.type) {
-      case EType.refresh_token:
+      case EType.refreshToken:
         return "Refresh token";
-      case EType.forgot_password:
+      case EType.forgotPassword:
         return "Recovery password token";
       default:
         return "Not expected type";
     }
   }
 
-  @Expose({ name: "is_expired" })
+  @Expose({ name: "isExpired" })
   getIsExpired(): boolean {
-    return isBefore(this.expires_at, dateNow());
+    return isBefore(this.expiresAt, dateNow());
   }
 
-  @Expose({ name: "is_revoked" })
+  @Expose({ name: "isRevoked" })
   getIsRevoked(): boolean {
-    return this.revoked_at !== null && this.revoked_at !== undefined;
+    return this.revokedAt !== null && this.revokedAt !== undefined;
   }
 
-  @Expose({ name: "is_active" })
+  @Expose({ name: "isActive" })
   getIsActive(): boolean {
     return !this.getIsExpired() && !this.getIsRevoked();
   }

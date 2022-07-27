@@ -12,16 +12,16 @@ export class SessionController {
     // Get email and pass in body request to match a created user.
     const { email, password } = req.body;
     // Get remote address for refresh token register.
-    const remote_address = req.socket.remoteAddress as string;
+    const remoteAddress = req.socket.remoteAddress as string;
 
     // Injects containers at service and execute it.
     const authenticateService = container.resolve(AuthenticateSessionService);
 
-    const { user, token, refresh_token, refresh_expiration } =
+    const { user, token, refreshToken, refreshExpiration } =
       await authenticateService.execute({
         email,
         password,
-        remote_address,
+        remoteAddress,
       });
 
     return (
@@ -29,10 +29,10 @@ export class SessionController {
         // Refresh token go inside a cookie so they are not accessible to
         // client-side javascript which prevents XSS (cross site scripting)
         // attacks.
-        .cookie("refresh_token", refresh_token, {
+        .cookie("refreshToken", refreshToken, {
           httpOnly: true,
           sameSite: "lax",
-          expires: refresh_expiration,
+          expires: refreshExpiration,
         })
         .json({
           user: instanceToInstance(user),
@@ -46,17 +46,17 @@ export class SessionController {
    */
   async refresh(req: Request, res: Response): Promise<Response> {
     // Get refresh token cookie.
-    const [, refreshToken] = String(req.headers.cookie).split("refresh_token=");
+    const [, cookieToken] = String(req.headers.cookie).split("refreshToken=");
     // Get remote address for refresh token register.
-    const remote_address = req.socket.remoteAddress as string;
+    const remoteAddress = req.socket.remoteAddress as string;
 
     // Injects containers at service and execute it.
     const refreshService = container.resolve(RefreshSessionService);
 
-    const { token, refresh_token, refresh_expiration } =
+    const { token, refreshToken, refreshExpiration } =
       await refreshService.execute({
-        cookie_refresh_token: refreshToken,
-        remote_address,
+        cookieRefreshToken: cookieToken,
+        remoteAddress,
       });
 
     return (
@@ -64,10 +64,10 @@ export class SessionController {
         // Refresh token go inside a cookie so they are not accessible to
         // client-side javascript which prevents XSS (cross site scripting)
         // attacks. The cookie will be replaced by the new one.
-        .cookie("refresh_token", refresh_token, {
+        .cookie("refreshToken", refreshToken, {
           httpOnly: true,
           sameSite: "lax",
-          expires: refresh_expiration,
+          expires: refreshExpiration,
         })
         .json({
           token,
@@ -78,16 +78,16 @@ export class SessionController {
   /** Revoke token for user session, making it inactive. */
   async revoke(req: Request, res: Response): Promise<Response> {
     // Get refresh token cookie.
-    const [, refreshToken] = String(req.headers.cookie).split("refresh_token=");
+    const [, cookieToken] = String(req.headers.cookie).split("refreshToken=");
     // Get remote address for refresh token register.
-    const remote_address = req.socket.remoteAddress as string;
+    const remoteAddress = req.socket.remoteAddress as string;
 
     // Injects containers at service and execute it.
     const revokeService = container.resolve(RevokeSessionService);
 
     await revokeService.execute({
-      cookie_refresh_token: refreshToken,
-      remote_address,
+      cookieRefreshToken: cookieToken,
+      remoteAddress,
     });
 
     return res.status(204).send();
