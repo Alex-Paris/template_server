@@ -39,6 +39,14 @@
         "description": "Find out more",
         "url": "http://swagger.io"
       }
+    },
+    {
+      "name": "password",
+      "description": "Operations about user access password",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
     }
   ],
   "paths": {
@@ -177,6 +185,62 @@
           },
           "401": {
             "description": "Refresh token not found; Invalid Refresh Token; Expired Refresh Token; Refresh Token already revoked;"
+          }
+        }
+      }
+    },
+    "/session/revoke-token": {
+      "post": {
+        "tags": [
+          "session"
+        ],
+        "summary": "Revoke user session token",
+        "description": "",
+        "operationId": "revokeSession",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Refresh token not found; Invalid Refresh Token; Expired Refresh Token; Refresh Token already revoked;"
+          }
+        }
+      }
+    },
+    "/password/forgot": {
+      "post": {
+        "tags": [
+          "password"
+        ],
+        "summary": "Send an email to recover a user password",
+        "description": "",
+        "operationId": "forgotPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "sample@email.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Mail sended!"
+          },
+          "404": {
+            "description": "User does not found."
           }
         }
       }
