@@ -16,4 +16,15 @@ passwordRouter.post(
   passwordController.forgot
 );
 
+passwordRouter.post(
+  "/reset",
+  celebrate({
+    [Segments.BODY]: {
+      token: Joi.string().required(),
+      password: Joi.string().required(),
+    },
+  }),
+  passwordController.reset
+);
+
 export { passwordRouter };

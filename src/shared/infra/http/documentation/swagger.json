@@ -244,6 +244,46 @@
           }
         }
       }
+    },
+    "/password/reset": {
+      "post": {
+        "tags": [
+          "password"
+        ],
+        "summary": "Request an reset password for user",
+        "description": "",
+        "operationId": "resetPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "example": "sampletoken"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "samplepass"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "OK!"
+          },
+          "401": {
+            "description": "Token not found; Invalid Token; Expired Token; Token already revoked;"
+          },
+          "404": {
+            "description": "User does not found."
+          }
+        }
+      }
     }
   },
   "definitions": {

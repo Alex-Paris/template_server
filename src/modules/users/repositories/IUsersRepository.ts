@@ -11,6 +11,12 @@ export interface IUsersRepository {
   create(data: ICreateUserDTO): Promise<User>;
 
   /**
+   * Save user in repository.
+   * @param user user to be saved.
+   */
+  save(user: User): Promise<User>;
+
+  /**
    * Find a user by email.
    * @param email email of the user.
    */
