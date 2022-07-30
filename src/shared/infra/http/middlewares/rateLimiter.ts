@@ -1,41 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import {
-  IRateLimiterStoreOptions,
-  RateLimiterMemory,
-  RateLimiterRedis,
-} from "rate-limiter-flexible";
+import { RateLimiterRedis } from "rate-limiter-flexible";
+
+import rate from "@config/rate";
 
 import { AppError } from "@shared/errors/AppError";
-import { redisDataSource } from "@shared/infra/redis/data-source";
 
 import { addSeconds, dateNow } from "@utils/date";
 
-// Options rate limiter.
-const opts: IRateLimiterStoreOptions = {
-  // Basic options.
-  storeClient: redisDataSource,
-  points: 5, // Number of points.
-  duration: 5, // Per second(s).
-
-  // Custom
-  execEvenly: false, // Do not delay actions evenly.
-  blockDuration: 5, // Block for 5 seconds if consumed more than points.
-  keyPrefix: "rate_limit", // must be unique for limiters with different purpose.
-
-  // Redis specific
-  inmemoryBlockOnConsumed: 10, // If 10 points consumed in current duration.
-  inmemoryBlockDuration: 30, // block for 30 seconds in current process memory.
-  insuranceLimiter: new RateLimiterMemory(
-    // It will be used only on Redis error as insurance.
-    {
-      points: 1, // 1 is fair if you have 5 workers and 1 cluster.
-      duration: 5,
-      execEvenly: false,
-    }
-  ),
-};
-
-const rateLimiterRedis = new RateLimiterRedis(opts);
+// Must be outside of function, besides memory will be reseted every request.
+const rateLimiterRedis = new RateLimiterRedis(rate.rateLimit);
 
 export async function rateLimiter(
   req: Request,
