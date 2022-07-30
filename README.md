@@ -37,6 +37,8 @@ Template for server API with Typescript
 
 *express-async-errors* - Let the possibility to use a class to proccess error messages.
 
+*ioredis* - Redis components. (IMPORTANT: "ioredis" works better than "redis" to use with "rate-limiter-flexible" bcoz you can perform a "commandTimeout" that returns an error if there's no return after the initial connection. Otherwise, timeout will only work in the first try connection and will freeze requests to API if a command doesn't get any answers).
+
 *handlebars* - Uses templates to generate HTML or other text formats.
 
 *jsonwebtoken* - Method to authenticate services in "rest". Divided by 3 parts: Headers, Payload and Signature.
@@ -44,6 +46,8 @@ Template for server API with Typescript
 *nodemailer* - Use ethereal for test mail sending.
 
 *pg* - PostgreSQL components.
+
+*rate-limiter-flexible* - Protect API against "brute force" attacks.
 
 *reflect-metadata* - Used for typeORM to parse decorators and use it to building sql queries.
 

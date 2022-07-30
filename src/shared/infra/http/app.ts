@@ -10,10 +10,12 @@ import swaggerUi from "swagger-ui-express";
 import { AppError } from "@shared/errors/AppError";
 
 import swaggerFile from "./documentation/swagger.json";
+import { rateLimiter } from "./middlewares/rateLimiter";
 import { routes } from "./routes";
 
 const app = express();
 
+app.use(rateLimiter);
 app.use(express.json());
 
 app.use("/api/v1", routes);

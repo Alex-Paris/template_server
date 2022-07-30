@@ -11,8 +11,10 @@ services:
       - .:/usr/app
     links:
       - database
+      - cache
     depends_on:
       - database
+      - cache
 
   database:
     image: postgres
@@ -24,3 +26,20 @@ services:
       - POSTGRES_USER=usernamesample
       - POSTGRES_PASSWORD=passwordsample
       - POSTGRES_DB=dbnamesample
+    volumes:
+      - database:/data/postgres
+
+  cache:
+    image: redis:alpine
+    container_name: cache_name_sample
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - cache:/data/redis
+
+volumes:
+  database:
+    driver: local
+  cache:
+    driver: local

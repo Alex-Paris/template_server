@@ -71,6 +71,15 @@ export function dateNow(): Date {
 }
 
 /**
+ * Add seconds inside a date.
+ * @param date date to have seconds added.
+ * @param amount amount in number of seconds to add in date.
+ */
+export function addSeconds(date: Date, amount: number): Date {
+  return dayjs(convertToUTC(date)).add(amount, "seconds").toDate();
+}
+
+/**
  * Add hours inside a date.
  * @param date date to have hours added.
  * @param amount amount in number of hours to add in date.
