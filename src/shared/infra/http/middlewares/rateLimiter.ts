@@ -8,21 +8,21 @@ import { AppError } from "@shared/errors/AppError";
 import { addSeconds, dateNow } from "@utils/date";
 
 // Must be outside of function, besides memory will be reseted every request.
-const rateLimiterRedis = new RateLimiterRedis(rate.rateLimit);
+const rateLimit = new RateLimiterRedis(rate.rateLimit);
 
 export async function rateLimiter(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  await rateLimiterRedis
+  await rateLimit
     .consume(req.ip)
-    .then((rateLimiterRes) => {
+    .then((rateLimitRes) => {
       // Client can consume.
       // Input rate limits in response header.
-      const secs = Math.round(rateLimiterRes.msBeforeNext / 1000) || 1;
-      res.set("X-RateLimit-Limit", String(rateLimiterRedis.points));
-      res.set("X-RateLimit-Remaining", String(rateLimiterRes.remainingPoints));
+      const secs = Math.round(rateLimitRes.msBeforeNext / 1000) || 1;
+      res.set("X-RateLimit-Limit", String(rateLimit.points));
+      res.set("X-RateLimit-Remaining", String(rateLimitRes.remainingPoints));
       res.set("X-RateLimit-Reset", String(addSeconds(dateNow(), secs)));
       next();
     })
@@ -36,7 +36,7 @@ export async function rateLimiter(
         // If there is no error, rateLimiterRedis promise rejected with number
         // of ms before next request allowed.
         const secs = Math.round(rejRes.msBeforeNext / 1000) || 1;
-        res.set("X-RateLimit-Limit", String(rateLimiterRedis.points));
+        res.set("X-RateLimit-Limit", String(rateLimit.points));
         res.set("X-RateLimit-Remaining", String(rejRes.remainingPoints));
         res.set("X-RateLimit-Reset", String(addSeconds(dateNow(), secs)));
         res.set("Retry-After", String(secs));
