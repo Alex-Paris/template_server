@@ -1,43 +1,26 @@
 import { Request, Response, NextFunction } from "express";
-import Redis from "ioredis";
 import {
-  RateLimiterRedis,
-  RateLimiterMemory,
   IRateLimiterStoreOptions,
+  RateLimiterMemory,
+  RateLimiterRedis,
 } from "rate-limiter-flexible";
 
 import { AppError } from "@shared/errors/AppError";
+import { redisDataSource } from "@shared/infra/redis/data-source";
 
 import { addSeconds, dateNow } from "@utils/date";
-
-// Create redis client.
-const redisClient = new Redis({
-  // Connection options.
-  host: process.env.REDIS_HOST,
-  port: Number(process.env.REDIS_PORT),
-  password: process.env.REDIS_PASS || undefined,
-
-  // Additional options.
-  commandTimeout: 3000, // Time waiting for command response.
-  enableOfflineQueue: false, // Only works with if client is connected.
-});
-
-// If no connection, an error will be emitted handle connection errors.
-redisClient.on("error", (err) => {
-  return new Error(err);
-});
 
 // Options rate limiter.
 const opts: IRateLimiterStoreOptions = {
   // Basic options.
-  storeClient: redisClient,
+  storeClient: redisDataSource,
   points: 5, // Number of points.
   duration: 5, // Per second(s).
 
   // Custom
   execEvenly: false, // Do not delay actions evenly.
-  blockDuration: 5, // Do not block if consumed more than points.
-  keyPrefix: "ratelimit", // must be unique for limiters with different purpose.
+  blockDuration: 5, // Block for 5 seconds if consumed more than points.
+  keyPrefix: "rate_limit", // must be unique for limiters with different purpose.
 
   // Redis specific
   inmemoryBlockOnConsumed: 10, // If 10 points consumed in current duration.
@@ -63,11 +46,11 @@ export async function rateLimiter(
     .consume(req.ip)
     .then((rateLimiterRes) => {
       // Client can consume.
+      // Input rate limits in response header.
       const secs = Math.round(rateLimiterRes.msBeforeNext / 1000) || 1;
-      res.set("X-RateLimit-Limit", String(opts.points));
+      res.set("X-RateLimit-Limit", String(rateLimiterRedis.points));
       res.set("X-RateLimit-Remaining", String(rateLimiterRes.remainingPoints));
       res.set("X-RateLimit-Reset", String(addSeconds(dateNow(), secs)));
-
       next();
     })
     .catch((rejRes) => {
@@ -80,10 +63,10 @@ export async function rateLimiter(
         // If there is no error, rateLimiterRedis promise rejected with number
         // of ms before next request allowed.
         const secs = Math.round(rejRes.msBeforeNext / 1000) || 1;
-        res.set("Retry-After", String(secs));
-        res.set("X-RateLimit-Limit", String(opts.points));
-        res.set("X-RateLimit-Remaining", rejRes.remainingPoints);
+        res.set("X-RateLimit-Limit", String(rateLimiterRedis.points));
+        res.set("X-RateLimit-Remaining", String(rejRes.remainingPoints));
         res.set("X-RateLimit-Reset", String(addSeconds(dateNow(), secs)));
+        res.set("Retry-After", String(secs));
         throw new AppError("Too many requests.", 429);
       }
     });
