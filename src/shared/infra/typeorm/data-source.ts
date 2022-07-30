@@ -17,6 +17,7 @@ export const pgDataSource = new DataSource({
   password: process.env.PG_PASS,
   database: process.env.PG_DB,
   useUTC: true,
+  connectTimeoutMS: 20 * 1000,
   dropSchema: process.env.NODE_ENV !== "production",
   migrationsTableName: "_migrations",
   migrationsRun: process.env.NODE_ENV !== "test",
