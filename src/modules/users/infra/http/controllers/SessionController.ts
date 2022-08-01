@@ -12,7 +12,7 @@ export class SessionController {
     // Get email and pass in body request to match a created user.
     const { email, password } = req.body;
     // Get remote address for refresh token register.
-    const remoteAddress = req.socket.remoteAddress as string;
+    const remoteAddress = req.ip;
 
     // Injects containers at service and execute it.
     const authenticateService = container.resolve(AuthenticateSessionService);
@@ -48,7 +48,7 @@ export class SessionController {
     // Get refresh token cookie.
     const [, cookieToken] = String(req.headers.cookie).split("refreshToken=");
     // Get remote address for refresh token register.
-    const remoteAddress = req.socket.remoteAddress as string;
+    const remoteAddress = req.ip;
 
     // Injects containers at service and execute it.
     const refreshService = container.resolve(RefreshSessionService);
@@ -80,7 +80,7 @@ export class SessionController {
     // Get refresh token cookie.
     const [, cookieToken] = String(req.headers.cookie).split("refreshToken=");
     // Get remote address for refresh token register.
-    const remoteAddress = req.socket.remoteAddress as string;
+    const remoteAddress = req.ip;
 
     // Injects containers at service and execute it.
     const revokeService = container.resolve(RevokeSessionService);
