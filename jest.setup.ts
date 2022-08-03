@@ -11,3 +11,8 @@ process.env.PG_DB = "dbnamesample";
 process.env.PG_USER = "usernamesample";
 process.env.PG_PASS = "passwordsample";
 process.env.PG_MIGRATION = "false";
+
+// Redis
+process.env.REDIS_HOST = "localhost";
+process.env.REDIS_PORT = "6379";
+process.env.REDIS_PASS = "";

@@ -173,7 +173,6 @@ describe("Refresh Session Controller", () => {
       .getOne()) as UserTokens;
 
     // Extract content to be used in expect.
-    const cookedToken = String(response.header["set-cookie"]).split("; ")[0];
     const { compareInDays } = utilDate;
     const { refreshSecret, refreshExpiresIn } = auth.jwt;
     const { type, refreshToken, createdAt, expiresAt } = userToken;
@@ -181,7 +180,6 @@ describe("Refresh Session Controller", () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("token");
     // expect(response.body.user.id).toBe(authUser.id);
-    expect(cookedToken).toContain(refreshToken);
     expect(type).toBe(EType.refreshToken);
     expect(verify(refreshToken, refreshSecret));
     expect(compareInDays(createdAt, expiresAt)).toBe(refreshExpiresIn);
@@ -224,7 +222,7 @@ describe("Refresh Session Controller", () => {
   });
 
   it("should not be able to refresh with an expired token", async () => {
-    jest.spyOn(utilDate, "dateNow").mockImplementationOnce(() => {
+    jest.spyOn(utilDate, "dateNow").mockImplementation(() => {
       return new Date("2199-12-17T00:00:00");
     });
 
@@ -367,7 +365,7 @@ describe("Revoke Session Controller", () => {
   });
 
   it("should not be able to revoke with an expired token", async () => {
-    jest.spyOn(utilDate, "dateNow").mockImplementationOnce(() => {
+    jest.spyOn(utilDate, "dateNow").mockImplementation(() => {
       return new Date("2199-12-17T00:00:00");
     });
 

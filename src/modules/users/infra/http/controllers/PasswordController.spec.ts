@@ -217,7 +217,7 @@ describe("Reset Password Controller", () => {
   });
 
   it("should not be able to reset password with an expired token", async () => {
-    jest.spyOn(utilDate, "dateNow").mockImplementationOnce(() => {
+    jest.spyOn(utilDate, "dateNow").mockImplementation(() => {
       return new Date("2199-12-17T00:00:00");
     });
 
