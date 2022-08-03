@@ -54,7 +54,7 @@ export class AuthenticateSessionService {
   }: IRequestDTO): Promise<IResponse> {
     const user = await this.usersRepository.findByEmail(email);
 
-    // Validating if its a valid user
+    // Validating if its a valid user.
     if (!user) {
       throw new AuthenticateSessionError.IncorrectEmailOrPasswordError();
     }
@@ -64,14 +64,14 @@ export class AuthenticateSessionService {
       user.password
     );
 
-    // Comparing if inserted pass match with saved onde
+    // Comparing if inserted pass match with saved one.
     if (!passwordMatched) {
       throw new AuthenticateSessionError.IncorrectEmailOrPasswordError();
     }
 
     const { secret, expiresIn, refreshSecret, refreshExpiresIn } = auth.jwt;
 
-    // Generate new token and refresh token
+    // Generate new token and refresh token.
     const token = sign({}, secret, {
       subject: user.id,
       expiresIn,
@@ -82,10 +82,10 @@ export class AuthenticateSessionService {
       expiresIn: `${refreshExpiresIn}d`,
     });
 
-    // Getting refresh token expiration date for cookie
+    // Getting refresh token expiration date for cookie.
     const refreshExpiration = addDays(dateNow(), refreshExpiresIn);
 
-    // Create a new refresh token
+    // Create a new refresh token.
     await this.usersTokensRepository.create({
       refreshToken,
       type: EType.refreshToken,
@@ -94,7 +94,7 @@ export class AuthenticateSessionService {
       userId: user.id,
     });
 
-    // Remove old refresh tokens from user
+    // Remove old refresh tokens from user.
     await this.usersTokensRepository.deleteOldRefreshTokens(user.id);
 
     return {

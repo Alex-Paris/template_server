@@ -8,6 +8,9 @@ import express, { NextFunction, Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
 
 import { AppError } from "@shared/errors/AppError";
+import { LimiterError } from "@shared/errors/LimiterError";
+
+import { fillXRateLimitHeader } from "@utils/rate";
 
 import swaggerFile from "./documentation/swagger.json";
 import { rateLimiter } from "./middlewares/rateLimiter";
@@ -30,6 +33,16 @@ app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
     return res.status(err.statusCode).json({
       status: "error",
       message: err.message,
+    });
+  }
+
+  if (err instanceof LimiterError) {
+    const { secsBeforeNext, msBeforeNext, limitPoints, remainingPoints } = err;
+    fillXRateLimitHeader({ res, msBeforeNext, limitPoints, remainingPoints });
+    res.set("Retry-After", String(secsBeforeNext));
+    return res.status(429).json({
+      status: "error",
+      message: "Too many requests.",
     });
   }
 
