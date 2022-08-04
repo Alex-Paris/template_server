@@ -57,10 +57,6 @@ app.use("/api/v1", routes);
 // Include a route for "swagger" documentation.
 app.use("/api/v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-app.get("/debug-sentry", function mainHandler(req, res) {
-  throw new Error("My first Sentry error!");
-});
-
 // Sentry error handler must be before any other error middleware and after all
 // controllers.
 app.use(
