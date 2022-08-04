@@ -23,6 +23,8 @@ Template for server API with Typescript
 
 ## Packages
 #### Dependencies
+*@sentry* - Used for monitoring and error tracking.
+
 *bcryptjs* - Used to hash and validate user password.
 
 *celebrate* - Used as a middleware to validate "put" and "post" routes body.
@@ -37,9 +39,9 @@ Template for server API with Typescript
 
 *express-async-errors* - Let the possibility to use a class to proccess error messages.
 
-*ioredis* - Redis components. (IMPORTANT: "ioredis" works better than "redis" to use with "rate-limiter-flexible" bcoz you can perform a "commandTimeout" that returns an error if there's no return after the initial connection. Otherwise, timeout will only work in the first try connection and will freeze requests to API if a command doesn't get any answers).
-
 *handlebars* - Uses templates to generate HTML or other text formats.
+
+*ioredis* - Redis components. (IMPORTANT: "ioredis" works better than "redis" to use with "rate-limiter-flexible" bcoz you can perform a "commandTimeout" that returns an error if there's no return after the initial connection. Otherwise, timeout will only work in the first try connection and will freeze requests to API if a command doesn't get any answers).
 
 *jsonwebtoken* - Method to authenticate services in "rest". Divided by 3 parts: Headers, Payload and Signature.
 
