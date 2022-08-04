@@ -1,6 +1,10 @@
 import { instanceToInstance } from "class-transformer";
 import { sign } from "jsonwebtoken";
-import { RateLimiterRedis, RateLimiterRes } from "rate-limiter-flexible";
+import {
+  RateLimiterMemory,
+  RateLimiterRedis,
+  RateLimiterRes,
+} from "rate-limiter-flexible";
 import { injectable, inject } from "tsyringe";
 
 import { EType } from "@modules/users/infra/typeorm/entities/UserTokens";
@@ -22,8 +26,8 @@ interface IRequestDTO {
   email: string;
   password: string;
   remoteAddress: string;
-  limiterSlowBruteByIP: RateLimiterRedis;
-  limiterConsecutiveFailsByEmailAndIP: RateLimiterRedis;
+  limiterSlowBruteByIP: RateLimiterRedis | RateLimiterMemory;
+  limiterConsecutiveFailsByEmailAndIP: RateLimiterRedis | RateLimiterMemory;
 }
 
 interface IResponse {
