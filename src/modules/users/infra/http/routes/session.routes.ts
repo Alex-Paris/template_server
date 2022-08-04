@@ -2,6 +2,7 @@ import { celebrate, Segments, Joi } from "celebrate";
 import { Router } from "express";
 
 import { SessionController } from "../controllers/SessionController";
+import { rateLimitSession } from "../middlewares/rateLimitSession";
 
 const sessionRouter = Router();
 const sessionController = new SessionController();
@@ -14,6 +15,7 @@ sessionRouter.post(
       password: Joi.string().required(),
     },
   }),
+  rateLimitSession,
   sessionController.authenticate
 );
 

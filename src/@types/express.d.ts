@@ -5,5 +5,10 @@ declare namespace Express {
     user: {
       id: string;
     };
+    /** Rater limits used in routerAuthenticated user forneced from middleware _'ensureAuthenticated'_. */
+    raterLimits: {
+      limiterSlowBruteByIP: RateLimiterRedis;
+      limiterConsecutiveFailsByEmailAndIP: RateLimiterRedis;
+    };
   }
 }

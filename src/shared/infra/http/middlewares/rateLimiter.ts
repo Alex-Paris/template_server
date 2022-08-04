@@ -18,21 +18,22 @@ import { fillXRateLimitHeader } from "@utils/rate";
 const rateLimit = new RateLimiterRedis({
   // Basic options.
   storeClient: redisDataSource,
-  points: rate.limits.rateLimitPoints, // Number of points.
+  points: rate.limits.failConsecutiveIpAttemptsPoints, // Number of points.
   duration: 5, // Per second(s).
   blockDuration: 5, // Block for 5 seconds if consumed more than points.
 
   // Custom
   execEvenly: false, // Do not delay actions evenly.
-  keyPrefix: "rate_limit", // must be unique for limiters with different purpose.
+  keyPrefix: "fail_consecutive_ip_attempts", // must be unique for limiters with different purpose.
 
   // Redis specific
-  inmemoryBlockOnConsumed: rate.limits.rateLimitInMemoBlockPoints, // If 10 points consumed in current duration.
+  inmemoryBlockOnConsumed:
+    rate.limits.failConsecutiveIpAttemptsInMemoBlockPoints, // If 10 points consumed in current duration.
   inmemoryBlockDuration: 30, // block for 30 seconds in current process memory.
   insuranceLimiter: new RateLimiterMemory(
     // It will be used only on Redis error as insurance.
     {
-      points: rate.limits.rateLimitInsurancePoints, // 1 is fair if you have 5 workers and 1 cluster.
+      points: rate.limits.failConsecutiveIpAttemptsInsurancePoints, // 1 is fair if you have 5 workers and 1 cluster.
       duration: 5,
       execEvenly: false,
     }

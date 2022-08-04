@@ -28,3 +28,12 @@ export async function fillXRateLimitHeader({
   res.set("X-RateLimit-Remaining", String(remainingPoints));
   res.set("X-RateLimit-Reset", String(addSeconds(dateNow(), secs)));
 }
+
+/**
+ * Form key for "limiterConsecutiveFailsByEmailAndIP" rate limit in Redis.
+ * @param email to reseive the header values.
+ * @param ip milliseconds before next reset.
+ */
+export function getEmailIPkey(email: string, ip: string): string {
+  return `${email}_${ip}`;
+}

@@ -13,6 +13,9 @@ export class SessionController {
     const { email, password } = req.body;
     // Get remote address for refresh token register.
     const remoteAddress = req.ip;
+    // Get rate limiters for email and IP authentication.
+    const { limiterSlowBruteByIP, limiterConsecutiveFailsByEmailAndIP } =
+      req.raterLimits;
 
     // Injects containers at service and execute it.
     const authenticateService = container.resolve(AuthenticateSessionService);
@@ -22,6 +25,8 @@ export class SessionController {
         email,
         password,
         remoteAddress,
+        limiterSlowBruteByIP,
+        limiterConsecutiveFailsByEmailAndIP,
       });
 
     return (

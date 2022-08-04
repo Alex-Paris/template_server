@@ -1,5 +1,6 @@
 import "express-async-errors";
 
+import "../redis";
 import "../typeorm";
 import "../../containers";
 

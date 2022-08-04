@@ -6,5 +6,12 @@ redisDataSource.on("error", (err) => {
 
 redisDataSource
   .connect()
-  .then()
+  .then(async () => {
+    if (process.env.NODE_ENV !== "development") {
+      return;
+    }
+
+    // Clean db for 'development' env.
+    await redisDataSource.flushdb();
+  })
   .catch((error) => console.log(error));
