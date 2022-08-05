@@ -4,7 +4,7 @@ import { IMailProvider } from "../models/IMailProvider";
 export class MockMailProvider implements IMailProvider {
   private messages: ISendMailDTO[] = [];
 
-  public async sendMail(message: ISendMailDTO): Promise<void> {
+  async sendMail(message: ISendMailDTO): Promise<void> {
     this.messages.push(message);
   }
 }

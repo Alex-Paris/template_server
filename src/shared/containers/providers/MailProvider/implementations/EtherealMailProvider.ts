@@ -29,7 +29,7 @@ export class EtherealMailProvider implements IMailProvider {
     });
   }
 
-  public async sendMail({
+  async sendMail({
     to,
     from,
     subject,
