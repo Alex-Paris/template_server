@@ -7,6 +7,7 @@ import {
 } from "rate-limiter-flexible";
 import { injectable, inject } from "tsyringe";
 
+import { User } from "@modules/users/infra/typeorm/entities/User";
 import { EType } from "@modules/users/infra/typeorm/entities/UserTokens";
 import { IUsersRepository } from "@modules/users/repositories/IUsersRepository";
 import { IUsersTokensRepository } from "@modules/users/repositories/IUsersTokensRepository";
@@ -19,7 +20,6 @@ import { LimiterError } from "@shared/errors/LimiterError";
 import { addDays, dateNow } from "@utils/date";
 import { getEmailIPkey } from "@utils/rate";
 
-import { User } from "../../infra/typeorm/entities/User";
 import { AuthenticateSessionError } from "./AuthenticateSessionError";
 
 interface IRequestDTO {

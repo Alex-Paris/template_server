@@ -2,9 +2,9 @@ import { instanceToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { AuthenticateSessionService } from "@modules/users/services/authenticateSession/AuthenticateSessionService";
-import { RefreshSessionService } from "@modules/users/services/refreshSession/RefreshSessionService";
-import { RevokeSessionService } from "@modules/users/services/revokeSession/RevokeSessionService";
+import { AuthenticateSessionService } from "@modules/users/services/session/authenticate/AuthenticateSessionService";
+import { RefreshSessionService } from "@modules/users/services/session/refresh/RefreshSessionService";
+import { RevokeSessionService } from "@modules/users/services/session/revoke/RevokeSessionService";
 
 export class SessionController {
   /** Authenticate user session generating a new token and refresh token. */

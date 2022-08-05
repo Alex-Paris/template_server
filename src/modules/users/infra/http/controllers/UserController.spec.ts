@@ -1,7 +1,7 @@
 import request from "supertest";
 
 import { ICreateUserDTO } from "@modules/users/dtos/ICreateUserDTO";
-import { CreateUserError } from "@modules/users/services/createUser/CreateUserError";
+import { CreateUserError } from "@modules/users/services/user/create/CreateUserError";
 
 import { app } from "@shared/infra/http/app";
 import { pgDataSource } from "@shared/infra/typeorm/data-source";

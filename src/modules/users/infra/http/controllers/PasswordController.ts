@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { ForgotPasswordService } from "@modules/users/services/forgotPassword/ForgotPasswordService";
-import { ResetPasswordService } from "@modules/users/services/resetPassword/ResetPasswordService";
+import { ForgotPasswordService } from "@modules/users/services/password/forgot/ForgotPasswordService";
+import { ResetPasswordService } from "@modules/users/services/password/reset/ResetPasswordService";
 
 export class PasswordController {
   /** Send a recover password mail to the requested email, generating a token

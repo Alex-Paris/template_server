@@ -1,8 +1,8 @@
 import { verify } from "jsonwebtoken";
 import request from "supertest";
 
-import { ForgotPasswordError } from "@modules/users/services/forgotPassword/ForgotPasswordError";
-import { ResetPasswordError } from "@modules/users/services/resetPassword/ResetPasswordError";
+import { ForgotPasswordError } from "@modules/users/services/password/forgot/ForgotPasswordError";
+import { ResetPasswordError } from "@modules/users/services/password/reset/ResetPasswordError";
 
 import auth from "@config/auth";
 

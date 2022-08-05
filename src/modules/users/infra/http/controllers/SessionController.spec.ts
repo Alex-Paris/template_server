@@ -1,9 +1,9 @@
 import { verify } from "jsonwebtoken";
 import request from "supertest";
 
-import { AuthenticateSessionError } from "@modules/users/services/authenticateSession/AuthenticateSessionError";
-import { RefreshSessionError } from "@modules/users/services/refreshSession/RefreshSessionError";
-import { RevokeSessionError } from "@modules/users/services/revokeSession/RevokeSessionError";
+import { AuthenticateSessionError } from "@modules/users/services/session/authenticate/AuthenticateSessionError";
+import { RefreshSessionError } from "@modules/users/services/session/refresh/RefreshSessionError";
+import { RevokeSessionError } from "@modules/users/services/session/revoke/RevokeSessionError";
 
 import auth from "@config/auth";
 

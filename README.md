@@ -15,7 +15,7 @@ Template for server API with Typescript
 
 ----
 #### Filling some files
-*Services* - Services can only have one single operation, a single service in API. This must have the name of a group followed by the name of the service. E.g.: "AuthenticateSessionService".
+*Services* - Services can only have one single operation, a single service in API. This must have the name of a group followed by the name of the service. E.g.: "AuthenticateSessionService". Their folders must follow the same, a folder for the group (e.g.: "session") and inside a folder for the especified service (e.g.: "authenticate").
 
 *Controllers* - Controls can contain more than one operation, but this have to be related in a group of services (if this can be possible to be separated in more than one group. If not, all Controllers MUST have to be especific from a service). E.g.: "SessionController". Inside of a grouped controller, you must specific the name of the service. E.g.: "Authenticate". If not grouped, the name is "handle".
 

@@ -73,6 +73,7 @@ export class ForgotPasswordService {
       __dirname,
       "..",
       "..",
+      "..",
       "views",
       "forgot_password.hbs"
     );

@@ -2,7 +2,7 @@ import { instanceToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { CreateUserService } from "@modules/users/services/createUser/CreateUserService";
+import { CreateUserService } from "@modules/users/services/user/create/CreateUserService";
 
 export class UserController {
   /** Creates a new user. */
