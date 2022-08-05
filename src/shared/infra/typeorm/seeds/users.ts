@@ -6,7 +6,7 @@ import { User } from "@modules/users/infra/typeorm/entities/User";
 
 import { pgDataSource } from "../data-source";
 
-export async function SeedUsers() {
+export async function SeedUsers(): Promise<void> {
   const repository: Repository<User> = pgDataSource.getRepository(User);
 
   // eslint-disable-next-line no-plusplus

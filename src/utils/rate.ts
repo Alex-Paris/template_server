@@ -21,7 +21,7 @@ export async function fillXRateLimitHeader({
   msBeforeNext,
   limitPoints,
   remainingPoints,
-}: IRateHeader) {
+}: IRateHeader): Promise<void> {
   // Input rate limits in response header.
   const secs = Math.round(msBeforeNext / 1000) || 1;
   res.set("X-RateLimit-Limit", String(limitPoints));

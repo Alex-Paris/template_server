@@ -2,6 +2,7 @@ import { IUsersRepository } from "modules/users/repositories/IUsersRepository";
 import { inject, injectable } from "tsyringe";
 
 import { ICreateUserDTO } from "@modules/users/dtos/ICreateUserDTO";
+import { User } from "@modules/users/infra/typeorm/entities/User";
 
 import { IHashProvider } from "@shared/containers/providers/HashProvider/models/IHashProvider";
 
@@ -23,7 +24,7 @@ export class CreateUserService {
    * @param email email of the user. Must not exist in repository.
    * @param password password of the user.
    */
-  async execute({ name, email, password }: ICreateUserDTO) {
+  async execute({ name, email, password }: ICreateUserDTO): Promise<User> {
     // Validating if the forneced email isn't already in repository.
     const checkEmailExists = await this.usersRepository.findByEmail(email);
 
