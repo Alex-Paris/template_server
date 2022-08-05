@@ -28,6 +28,10 @@ export class MockUsersRepository implements IUsersRepository {
     return user;
   }
 
+  async findById(id: string): Promise<User | null | undefined> {
+    return this.users.find((findUser) => findUser.id === id);
+  }
+
   async findByEmail(email: string): Promise<User | undefined | null> {
     return this.users.find((user) => user.email === email);
   }

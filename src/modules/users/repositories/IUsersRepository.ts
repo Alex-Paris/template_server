@@ -17,6 +17,12 @@ export interface IUsersRepository {
   save(user: User): Promise<User>;
 
   /**
+   * Find an user by it's id.
+   * @param id user id.
+   */
+  findById(id: string): Promise<User | undefined | null>;
+
+  /**
    * Find a user by email.
    * @param email email of the user.
    */
