@@ -45,6 +45,8 @@ Template for server API with Typescript
 
 *jsonwebtoken* - Method to authenticate services in "rest". Divided by 3 parts: Headers, Payload and Signature.
 
+*multer* - Destinable to import images.
+
 *nodemailer* - Use ethereal for test mail sending.
 
 *pg* - PostgreSQL components.

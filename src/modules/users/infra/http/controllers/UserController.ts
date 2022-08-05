@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 
 import { CreateUserService } from "@modules/users/services/user/create/CreateUserService";
+import { UpdateAvatarUserService } from "@modules/users/services/user/updateAvatar/UpdateAvatarUserService";
 
 export class UserController {
   /** Creates a new user. */
@@ -20,5 +21,18 @@ export class UserController {
     });
 
     return res.status(201).json(instanceToInstance(user));
+  }
+
+  /** Updates user avatar. */
+  async updateAvatar(req: Request, res: Response): Promise<Response> {
+    // Injects containers at service and execute it.
+    const updateAvatar = container.resolve(UpdateAvatarUserService);
+
+    const user = await updateAvatar.execute({
+      userId: req.user.id,
+      avatarFileName: req.file?.filename || "",
+    });
+
+    return res.json(instanceToInstance(user));
   }
 }

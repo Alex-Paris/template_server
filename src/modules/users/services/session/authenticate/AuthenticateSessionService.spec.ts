@@ -30,7 +30,7 @@ describe("Authenticate Session Service", () => {
     // Getting mocks components for service.
     mockUsersRepository = new MockUsersRepository();
 
-    // Create user in mock for session tests
+    // Create user in mock for session tests.
     authUser = await mockUsersRepository.create({
       name: "Name Sample",
       email: "sample@email.com",
