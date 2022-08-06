@@ -16,3 +16,9 @@ process.env.PG_MIGRATION = "false";
 process.env.REDIS_HOST = "localhost";
 process.env.REDIS_PORT = "6379";
 process.env.REDIS_PASS = "";
+
+// Storage
+process.env.STORAGE_DRIVER = "disk";
+
+// Mail
+process.env.MAIL_DRIVER = "ethereal";
