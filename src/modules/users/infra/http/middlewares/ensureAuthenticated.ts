@@ -39,7 +39,9 @@ export function ensureAuthenticated(
   const { sub: userId } = decoded as ITokenPayload;
 
   // Inserting user id inside express request.
-  req.user.id = userId;
+  req.user = {
+    id: userId,
+  };
 
   return next();
 }

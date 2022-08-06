@@ -13,9 +13,10 @@ import { pgDataSource } from "@shared/infra/typeorm/data-source";
 import * as utilDate from "@utils/date";
 import { delay } from "@utils/utils";
 
+import { User } from "../../typeorm/entities/User";
 import { EType, UserTokens } from "../../typeorm/entities/UserTokens";
 
-let testUser: Record<string, unknown>;
+let testUser: User;
 let testToken: string;
 
 describe("Authenticate Session Controller", () => {
