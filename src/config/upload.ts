@@ -3,15 +3,20 @@ import multer, { StorageEngine } from "multer";
 import path from "path";
 
 interface IUploadConfig {
+  /** Driver to be used for upload files. _(Default: "disk")_ . */
   driver: "disk" | "awsS3";
 
+  /** Temp folder where multer will put all inserted files before upload. */
   tmpFolder: string;
+  /** Upload folder for disk driver. */
   uploadsFolder: string;
 
+  /** Multer middleware configuration. */
   multer: {
     storage: StorageEngine;
   };
 
+  /** Driver configurations. */
   config: {
     aws: {
       bucket: string;
@@ -23,7 +28,7 @@ interface IUploadConfig {
 const tmpFolder = path.resolve(__dirname, "..", "..", "tmp");
 
 export default {
-  driver: process.env.STORAGE_DRIVER,
+  driver: process.env.STORAGE_DRIVER || "disk",
 
   tmpFolder,
   uploadsFolder: path.resolve(tmpFolder, "uploads"),

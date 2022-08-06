@@ -8,10 +8,10 @@ import upload from "@config/upload";
 import { IStorageProvider } from "../models/IStorageProvider";
 
 export class AWSS3StorageProvider implements IStorageProvider {
-  private s3: S3;
+  private client: S3;
 
   constructor() {
-    this.s3 = new aws.S3({
+    this.client = new aws.S3({
       apiVersion: "2006-03-01",
       region: upload.config.aws.region,
     });
@@ -31,7 +31,7 @@ export class AWSS3StorageProvider implements IStorageProvider {
 
     // Send file and its information to the bucket. ACL is "public-read", so the
     // client will not need AWS S3 keys to access it.
-    await this.s3
+    await this.client
       .upload({
         Bucket: upload.config.aws.bucket,
         Key: file,
@@ -49,7 +49,7 @@ export class AWSS3StorageProvider implements IStorageProvider {
 
   async deleteFile(file: string): Promise<void> {
     // Removes the file inside bucket.
-    await this.s3
+    await this.client
       .deleteObject({
         Bucket: upload.config.aws.bucket,
         Key: file,

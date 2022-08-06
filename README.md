@@ -51,7 +51,7 @@ Template for server API with Typescript
 
 *multer* - Middleware destinable to import images. Will save the file inside a specified folder (e.g.: "tmp").
 
-*nodemailer* - Use ethereal for test mail sending.
+*nodemailer* - Creates a transporter for mail sending, making it more easy to work.
 
 *pg* - PostgreSQL components.
 
