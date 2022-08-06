@@ -7,6 +7,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import upload from "@config/upload";
+
 @Entity("users")
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -38,14 +40,13 @@ export class User {
       return null;
     }
 
-    return "";
-    /* switch (uploadConfig.driver) {
+    switch (upload.driver) {
       case "disk":
         return `${process.env.APP_API_URL}/files/${this.avatar}`;
-      case "s3":
-        return `https://${uploadConfig.config.aws.bucket}.s3.${uploadConfig.config.aws.region}.amazonaws.com/${this.avatar}`;
+      case "awsS3":
+        return `https://${upload.config.aws.bucket}.s3.${upload.config.aws.region}.amazonaws.com/${this.avatar}`;
       default:
         return null;
-    } */
+    }
   }
 }

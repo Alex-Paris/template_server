@@ -25,6 +25,8 @@ Template for server API with Typescript
 #### Dependencies
 *@sentry* - Used for monitoring and error tracking.
 
+*aws-sdk* - Component to work with aws features and services.
+
 *bcryptjs* - Used to hash and validate user password.
 
 *celebrate* - Used as a middleware to validate "put" and "post" routes body.
@@ -45,7 +47,9 @@ Template for server API with Typescript
 
 *jsonwebtoken* - Method to authenticate services in "rest". Divided by 3 parts: Headers, Payload and Signature.
 
-*multer* - Destinable to import images.
+*mime* - Get detailed information of an imported file.
+
+*multer* - Middleware destinable to import images. Will save the file inside a specified folder (e.g.: "tmp").
 
 *nodemailer* - Use ethereal for test mail sending.
 

@@ -3,7 +3,7 @@ import multer, { StorageEngine } from "multer";
 import path from "path";
 
 interface IUploadConfig {
-  driver: "disk" | "aws-s3";
+  driver: "disk" | "awsS3";
 
   tmpFolder: string;
   uploadsFolder: string;
