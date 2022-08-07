@@ -6,7 +6,7 @@ import { UpdateAvatarUserError } from "@modules/users/services/user/updateAvatar
 
 import { DiskStorageProvider } from "@shared/containers/providers/StorageProvider/implementations/DiskStorageProvider";
 import { app } from "@shared/infra/http/app";
-import { pgDataSource } from "@shared/infra/typeorm/data-source";
+import { databaseSource } from "@shared/infra/typeorm/data-source";
 
 import { User } from "../../typeorm/entities/User";
 import { UsersRepository } from "../../typeorm/repositories/UsersRepository";
@@ -19,8 +19,8 @@ describe("Create User Controller", () => {
   beforeAll(async () => {
     // Connects at database and run migrations. It must be done in each test
     // controller file.
-    await pgDataSource.initialize();
-    await pgDataSource.runMigrations();
+    await databaseSource.initialize();
+    await databaseSource.runMigrations();
 
     // Put that new user information inside a var.
     newUser = {
@@ -32,8 +32,8 @@ describe("Create User Controller", () => {
 
   afterAll(async () => {
     // Delete and destroy entirely data.
-    await pgDataSource.dropDatabase();
-    await pgDataSource.destroy();
+    await databaseSource.dropDatabase();
+    await databaseSource.destroy();
   });
 
   it("should be able to create a new user", async () => {
@@ -41,7 +41,7 @@ describe("Create User Controller", () => {
     const response = await request(app).post("/api/v1/user").send(newUser);
 
     // Get the user saved at database for expecting test analisys.
-    const user = await pgDataSource
+    const user = await databaseSource
       .createQueryBuilder<User>(User, "users")
       .where("users.email = :email", { email: newUser.email })
       .getOne();
@@ -66,8 +66,8 @@ describe("Update Avatar User Controller", () => {
   beforeAll(async () => {
     // Connects at database and run migrations. It must be done in each test
     // controller file.
-    await pgDataSource.initialize();
-    await pgDataSource.runMigrations();
+    await databaseSource.initialize();
+    await databaseSource.runMigrations();
 
     // Create a user at "/api/v1/user" route to let possible to test.
     const { body: newUser } = await request(app).post("/api/v1/user").send({
@@ -96,8 +96,8 @@ describe("Update Avatar User Controller", () => {
 
   afterAll(async () => {
     // Delete and destroy entirely data.
-    await pgDataSource.dropDatabase();
-    await pgDataSource.destroy();
+    await databaseSource.dropDatabase();
+    await databaseSource.destroy();
   });
 
   it("should be able to update user avatar", async () => {
@@ -116,7 +116,7 @@ describe("Update Avatar User Controller", () => {
       });
 
     // Get the updated user for expecting test analisys.
-    const user = (await pgDataSource
+    const user = (await databaseSource
       .createQueryBuilder<User>(User, "users")
       .where("users.id = :id", { id: testUser.id })
       .getOne()) as User;
@@ -170,7 +170,7 @@ describe("Update Avatar User Controller", () => {
       });
 
     // Get the updated user for expecting test analisys.
-    const user = (await pgDataSource
+    const user = (await databaseSource
       .createQueryBuilder<User>(User, "users")
       .where("users.id = :id", { id: testUser.id })
       .getOne()) as User;

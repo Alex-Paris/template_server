@@ -8,7 +8,7 @@ import { RevokeSessionError } from "@modules/users/services/session/revoke/Revok
 import auth from "@config/auth";
 
 import { app } from "@shared/infra/http/app";
-import { pgDataSource } from "@shared/infra/typeorm/data-source";
+import { databaseSource } from "@shared/infra/typeorm/data-source";
 
 import * as utilDate from "@utils/date";
 import { delay } from "@utils/utils";
@@ -23,8 +23,8 @@ describe("Authenticate Session Controller", () => {
   beforeAll(async () => {
     // Connects at database and run migrations. It must be done in each test
     // controller file.
-    await pgDataSource.initialize();
-    await pgDataSource.runMigrations();
+    await databaseSource.initialize();
+    await databaseSource.runMigrations();
 
     // Create a user at "/api/v1/user" route to let possible to test sessions
     // controllers.
@@ -43,8 +43,8 @@ describe("Authenticate Session Controller", () => {
 
   afterAll(async () => {
     // Delete and destroy entirely data.
-    await pgDataSource.dropDatabase();
-    await pgDataSource.destroy();
+    await databaseSource.dropDatabase();
+    await databaseSource.destroy();
   });
 
   it("should be able to authenticate user session", async () => {
@@ -57,7 +57,7 @@ describe("Authenticate Session Controller", () => {
       });
 
     // Get the refresh token saved at database for expecting test analisys.
-    const userToken = (await pgDataSource
+    const userToken = (await databaseSource
       .createQueryBuilder<UserTokens>(UserTokens, "users_tokens")
       .where("users_tokens.user_id = :id", { id: testUser.id })
       .getOne()) as UserTokens;
@@ -114,8 +114,8 @@ describe("Refresh Session Controller", () => {
   beforeAll(async () => {
     // Connects at database and run migrations. It must be done in each test
     // controller file.
-    await pgDataSource.initialize();
-    await pgDataSource.runMigrations();
+    await databaseSource.initialize();
+    await databaseSource.runMigrations();
 
     // Create a user at "/api/v1/user" route to let possible to test sessions
     // controllers.
@@ -134,13 +134,17 @@ describe("Refresh Session Controller", () => {
 
   afterAll(async () => {
     // Delete and destroy entirely data.
-    await pgDataSource.dropDatabase();
-    await pgDataSource.destroy();
+    await databaseSource.dropDatabase();
+    await databaseSource.destroy();
   });
 
   beforeEach(async () => {
     // Deleting all tokens to avoid JWT with same code.
-    await pgDataSource.createQueryBuilder().delete().from(UserTokens).execute();
+    await databaseSource
+      .createQueryBuilder()
+      .delete()
+      .from(UserTokens)
+      .execute();
 
     // Authenticate user session at "/api/v1/session/authenticate" route to
     // create a cookie of a refresh token.
@@ -168,7 +172,7 @@ describe("Refresh Session Controller", () => {
     [, testToken] = String(testToken).split("refreshToken=");
 
     // Get the refresh token saved at database for expecting test analisys.
-    const userToken = (await pgDataSource
+    const userToken = (await databaseSource
       .createQueryBuilder<UserTokens>(UserTokens, "users_tokens")
       .where("users_tokens.refresh_token = :testToken", { testToken })
       .getOne()) as UserTokens;
@@ -202,7 +206,7 @@ describe("Refresh Session Controller", () => {
 
   it("should not be able to refresh with an unfound token", async () => {
     // Deleting valid token of database
-    await pgDataSource
+    await databaseSource
       .createQueryBuilder()
       .delete()
       .from(UserTokens)
@@ -268,8 +272,8 @@ describe("Revoke Session Controller", () => {
   beforeAll(async () => {
     // Connects at database and run migrations. It must be done in each test
     // controller file.
-    await pgDataSource.initialize();
-    await pgDataSource.runMigrations();
+    await databaseSource.initialize();
+    await databaseSource.runMigrations();
 
     // Create a user at "/api/v1/user" route to let possible to test sessions
     // controllers.
@@ -288,13 +292,17 @@ describe("Revoke Session Controller", () => {
 
   afterAll(async () => {
     // Delete and destroy entirely data.
-    await pgDataSource.dropDatabase();
-    await pgDataSource.destroy();
+    await databaseSource.dropDatabase();
+    await databaseSource.destroy();
   });
 
   beforeEach(async () => {
     // Deleting all tokens to avoid JWT with same code.
-    await pgDataSource.createQueryBuilder().delete().from(UserTokens).execute();
+    await databaseSource
+      .createQueryBuilder()
+      .delete()
+      .from(UserTokens)
+      .execute();
 
     // Authenticate user session at "/api/v1/session/authenticate" route to
     // create a cookie of a refresh token.
@@ -319,7 +327,7 @@ describe("Revoke Session Controller", () => {
 
     // Get the revoked token saved at database for expecting test analisys.
     const userToken =
-      (await pgDataSource
+      (await databaseSource
         .createQueryBuilder<UserTokens>(UserTokens, "users_tokens")
         .where("users_tokens.refresh_token = :testToken", { testToken })
         .getOne()) || new UserTokens();
@@ -345,7 +353,7 @@ describe("Revoke Session Controller", () => {
 
   it("should not be able to revoke with an unfound token", async () => {
     // Deleting valid token of database
-    await pgDataSource
+    await databaseSource
       .createQueryBuilder()
       .delete()
       .from(UserTokens)

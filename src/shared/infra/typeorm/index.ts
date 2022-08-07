@@ -1,7 +1,7 @@
-import { pgDataSource } from "./data-source";
+import { databaseSource } from "./data-source";
 import { SeedDB } from "./seeds";
 
-pgDataSource
+databaseSource
   .initialize()
   .then(async () => {
     if (process.env.NODE_ENV !== "development") {

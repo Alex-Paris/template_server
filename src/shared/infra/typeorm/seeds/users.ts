@@ -4,10 +4,10 @@ import { Repository } from "typeorm";
 
 import { User } from "@modules/users/infra/typeorm/entities/User";
 
-import { pgDataSource } from "../data-source";
+import { databaseSource } from "../data-source";
 
 export async function SeedUsers(): Promise<void> {
-  const repository: Repository<User> = pgDataSource.getRepository(User);
+  const repository: Repository<User> = databaseSource.getRepository(User);
 
   // eslint-disable-next-line no-plusplus
   for (let index = 0; index < 10; index++) {

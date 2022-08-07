@@ -9,7 +9,7 @@ import { DataSource } from "typeorm";
  * execute it. Drop schema is enabled to clean database in every node run and
  * let test controllers to repopulate it.
  */
-export const pgDataSource = new DataSource({
+export const databaseSource = new DataSource({
   type: "postgres",
   host: process.env.PG_HOST,
   port: Number(process.env.PG_PORT),

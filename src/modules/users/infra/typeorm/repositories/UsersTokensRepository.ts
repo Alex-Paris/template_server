@@ -4,7 +4,7 @@ import { ICreateTokenDTO } from "@modules/users/dtos/ICreateTokenDTO";
 import { IRevokeTokenDTO } from "@modules/users/dtos/IRevokeTokenDTO";
 import { IUsersTokensRepository } from "@modules/users/repositories/IUsersTokensRepository";
 
-import { pgDataSource } from "@shared/infra/typeorm/data-source";
+import { databaseSource } from "@shared/infra/typeorm/data-source";
 
 import { addDays, dateNow, isBefore } from "@utils/date";
 
@@ -14,7 +14,7 @@ export class UsersTokensRepository implements IUsersTokensRepository {
   private repository: Repository<UserTokens>;
 
   constructor() {
-    this.repository = pgDataSource.getRepository(UserTokens);
+    this.repository = databaseSource.getRepository(UserTokens);
   }
 
   async create(data: ICreateTokenDTO): Promise<UserTokens> {

@@ -3,7 +3,7 @@ import { Repository } from "typeorm";
 import { ICreateUserDTO } from "@modules/users/dtos/ICreateUserDTO";
 import { IUsersRepository } from "@modules/users/repositories/IUsersRepository";
 
-import { pgDataSource } from "@shared/infra/typeorm/data-source";
+import { databaseSource } from "@shared/infra/typeorm/data-source";
 
 import { User } from "../entities/User";
 
@@ -11,7 +11,7 @@ export class UsersRepository implements IUsersRepository {
   private repository: Repository<User>;
 
   constructor() {
-    this.repository = pgDataSource.getRepository(User);
+    this.repository = databaseSource.getRepository(User);
   }
 
   async create(userData: ICreateUserDTO): Promise<User> {
