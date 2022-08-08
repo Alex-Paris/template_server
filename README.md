@@ -49,6 +49,8 @@ Template for server API with Typescript
 
 *mime* - Get detailed information of an imported file.
 
+*mongodb* - MongoDB components.
+
 *multer* - Middleware destinable to import images. Will save the file inside a specified folder (e.g.: "tmp").
 
 *nodemailer* - Creates a transporter for mail sending, making it more easy to work.

@@ -1,4 +1,4 @@
-import { databaseSource } from "./data-source";
+import { databaseSource, queueSource } from "./data-source";
 import { SeedDB } from "./seeds";
 
 databaseSource
@@ -11,4 +11,9 @@ databaseSource
     // Repopulate 'development' env because drop schema.
     await SeedDB();
   })
+  .catch((error) => console.log(error));
+
+queueSource
+  .initialize()
+  .then()
   .catch((error) => console.log(error));
