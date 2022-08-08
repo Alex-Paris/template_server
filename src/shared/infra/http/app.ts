@@ -86,7 +86,6 @@ app.use(
 app.use(celebrate.errors());
 
 // Express async errors throw API error's in this handler.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
